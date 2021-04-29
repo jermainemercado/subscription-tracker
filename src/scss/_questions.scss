@@ -1,0 +1,12 @@
+.questions {
+    margin-top: 10rem;
+    text-align: center;
+    @include respond-to(xs) {
+       margin-left: 2rem;
+       margin-right: 2rem;
+    }
+    h6 {
+        font-family: 'Izmir-Semibold';
+        font-size: 1.2rem;
+    }
+}

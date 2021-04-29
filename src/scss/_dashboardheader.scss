@@ -1,0 +1,76 @@
+.dashboardheader {
+    padding: 1rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    @include respond-to(xs) {
+        padding: 2rem 1rem;
+    }
+    &_brand {
+        display: flex;
+        @include respond-to(xs) {
+            display: block;
+            text-align: center;
+        }
+        h2 {
+            font-family: 'Izmir-Bold';
+            font-size: 1.4rem;
+            line-height: 32px;
+            color: $primary;
+            margin-top: 5px;
+            margin-left: 2rem;
+            font-weight: 500;
+            @include respond-to(xs) {
+             margin: 0rem;
+            }
+        }
+    
+        h3 {
+            font-family: 'Izmir-Light';
+            font-size: 1.4rem;
+            line-height: 32px;
+            color: $black;
+            margin-top: 5px;
+            margin-left: .5rem;
+            @include respond-to(xs) {
+                margin: 0rem;
+            }
+        }
+    }
+
+    &_user {
+        display: flex;
+        align-items: center;
+        h5,h6, p {
+            text-align: right;
+            margin-bottom: 0px;
+        }
+        h6 {
+            color: $grey;
+            font-size: .9rem;
+        }
+        h5 {
+            font-family: 'Izmir-Semibold';
+            font-size: 1.2rem;
+        }
+        p {
+            font-size: .8rem;
+            font-weight: bold;
+            color: $grey;
+        }
+     &_avatar {
+         margin-left: .5rem;
+        border: solid 3px transparent;
+        border-radius: 100px;
+        background-image: linear-gradient(250deg, $secondary, $primary);
+        background-origin: border-box;
+        background-clip: content-box, border-box;
+        img {
+            margin: 3px;
+            border: 4px solid white;
+            border-radius: 100px;
+        }
+     }   
+    }
+    
+}

@@ -1,0 +1,15 @@
+.aboutus {
+    &_content {
+        font-family: 'Izmir-Medium';
+        font-size: 1.2rem;
+        color: $grey;
+        display: inline-block;
+        text-align: center;
+        margin-top: 3rem;
+        width: 70%;
+        @include respond-to(md) {
+            width: 80%;
+            font-size: 1rem;
+        } 
+    }
+}
