@@ -8,7 +8,12 @@ const port = process.env.PORT || 5000;
 const session = require('express-session');
 const passport = require('passport');
 const discordStrategy = require('./strategies/discordstrat.js');
+const db = require('./database/database.js');
 
+db.then(() => console.log('Connected to MongoDB')).catch(err => console.log(err))
+
+app.use(passport.initialize());
+app.use(passport.session());
 // Routers
 const authRoute = require('./Routers/auth.js');
 
@@ -24,8 +29,6 @@ app.use(session({
     },
     saveUninitialized: false
 }))
-app.use(passport.initialize());
-app.use(passport.session());
 
 app.get('*', (req, res) => {
     res.sendFile('index.html', {root})
