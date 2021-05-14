@@ -12,30 +12,33 @@ const db = require('./database/database.js');
 
 db.then(() => console.log('Connected to MongoDB')).catch(err => console.log(err))
 
+// passport/session
 app.use(passport.initialize());
+app.use(session({
+    secret: 'secret',
+    cookie: {
+        maxAge: 60000 * 60 * 24,
+        httpOnly: false,
+    },
+    saveUninitialized: false,
+    name: 'discord.oauth2',
+}))
 app.use(passport.session());
+
 // Routers
 const authRoute = require('./Routers/auth.js');
+const dashboardRoute = require('./Routers/dashboard.js');
+
+app.use('/auth', authRoute);
+app.use('/dashboard', dashboardRoute)
 
 // Middleware
 app.use(express.static(root))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use('/auth', authRoute);
-app.use(session({
-    secret: 'secretgoeshere',
-    cookie: {
-        maxAge: 60000 * 60 * 24
-    },
-    saveUninitialized: false
-}))
 
 app.get('*', (req, res) => {
     res.sendFile('index.html', {root})
-})
-
-app.get('/dashboard', (req, res) => {
-    
 })
 
 app.listen(port, () => {
