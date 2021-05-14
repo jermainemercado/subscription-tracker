@@ -1,0 +1,24 @@
+.main {
+  background-image: url('../assets/images/bg1.svg'), url('../assets/images/bg2.svg'), url('../assets/images/bg3.svg'), url('../assets/images/bg4.svg');
+  background-size: 30%, 20%, 18%, 38%;
+  background-repeat: no-repeat;
+  background-position-x: 101%, 0%, 0%, 100%;
+  background-position-y: 0px, 350px, 3580px, 3000px;
+  width: 100%;
+  @include respond-to(lg) {
+    background-size: 35%, 20%, 18%, 38%;
+    background-position-y: 0px, 400px, 3580px, 3000px;
+  } 
+  @include respond-to(sm) {
+    background-size: 45%, 20%, 18%, 38%;
+    background-position-y: 0px, 350px, 3580px, 3000px;
+  }
+  @include respond-to(xs) {
+    background-size: 30%, 20%, 18%, 38%;
+    background-position-y: 0px, 350px, 3580px, 3000px;
+  }
+  @include respond-to(xxs) {
+    background-size: 30%, 30%, 18%, 38%;
+    background-position-y: 0px, 450px, 3580px, 3400px;
+  }
+}

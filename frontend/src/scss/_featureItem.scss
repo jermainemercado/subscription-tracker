@@ -1,0 +1,53 @@
+.featureItem {
+    margin-top: 1rem;
+    padding: 2.1rem 1.9rem;
+    background: $white;
+    box-shadow: 0px 20px 60px rgba(0, 0, 0, 0.06);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.5s ease;
+   
+    @include respond-to(md) {
+        padding: 1.5rem 1.9rem;
+    }
+    &_image {
+        padding: 1rem;
+        background: linear-gradient(266.98deg, $secondary 4.26%, $primary 96.79%);    
+        background-color: rgba($white, 0.37);
+        border-radius: 30px;
+        width: 90px;
+        height: 90px;
+    }
+    &_title {
+        font-family: 'Izmir-Semibold';
+        font-size: 1.5rem;
+        color: $black;
+        @include respond-to(md) {
+            font-size: 1.2rem;
+        }
+    }
+    &_subtitle {
+        font-family: 'Izmir-Medium';
+        font-size: 0.875rem;
+        color: $grey;
+        @include respond-to(md) {
+            font-size: 0.7rem;
+        }
+    }
+    &_hover {
+        transform: scale(1.01);
+        background: linear-gradient(266.98deg, $secondary 4.26%, $primary 96.79%);    
+        .featureItem_image {
+            background: rgba($white, 0.37);
+            border-radius: 30px;
+        }
+        .featureItem_title {
+            font-family: 'Izmir-Semibold';
+            color: $white;
+        }
+        .featureItem_subtitle {
+            font-family: 'Izmir-Medium';
+            color: #C2C0F4;
+        }
+    }
+}
