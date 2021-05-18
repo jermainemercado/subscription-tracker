@@ -5,6 +5,11 @@ import arrow from '../../assets/images/arrow.svg';
 import whitelogo from 'assets/images/whitelogo.svg';
 
 const DashboardBody = () => {
+  function joinClickHandler() {
+    console.log("redirecting")
+    window.location.href = "https://discord.gg/AFb4fKvR4W";
+  }
+
   return (
     <div className="dashboardbody">
       <Row>
@@ -66,9 +71,9 @@ const DashboardBody = () => {
         </Col>
         <Col lg={4} md={6}>
           <div>
-            <button className="dashboardbody_button dashboardbody_button-join">
-              Join Discord
-            </button>
+              <button className="dashboardbody_button dashboardbody_button-join">
+                Join Discord
+              </button>
             <button className="dashboardbody_button dashboardbody_button-cancel">
               Cancel Subscription
             </button>

@@ -33,7 +33,6 @@ router.get('/cancelSub', isAuth, (req, res) => {
 })
 
 router.get('/logout', isAuth, (req, res) => {
-    //TODO: Log user out, delete session variables
     req.session.destroy();
     res.redirect('/')
 })
