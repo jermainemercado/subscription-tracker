@@ -12,8 +12,10 @@ const db = require('./database/database.js');
 
 db.then(() => console.log('Connected to MongoDB')).catch(err => console.log(err))
 
-// passport/session
-app.use(passport.initialize());
+// Routers
+const authRoute = require('./Routers/auth.js');
+const dashboardRoute = require('./Routers/dashboard.js');
+
 app.use(session({
     secret: 'secret',
     cookie: {
@@ -23,11 +25,10 @@ app.use(session({
     saveUninitialized: false,
     name: 'discord.oauth2',
 }))
-app.use(passport.session());
 
-// Routers
-const authRoute = require('./Routers/auth.js');
-const dashboardRoute = require('./Routers/dashboard.js');
+// passport/session
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/auth', authRoute);
 app.use('/dashboard', dashboardRoute)
