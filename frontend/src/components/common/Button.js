@@ -8,6 +8,7 @@ const Button = ({
   border = 'none',
   icon,
   iconClassName,
+  handleClick
 }) => {
   return (
     <button
@@ -17,6 +18,7 @@ const Button = ({
         `button-${bg}`,
         `button-border-${border}`,
       ])}
+      onClick={handleClick}
     >
       {label}
       {icon && <img src={icon} className={iconClassName} alt="arrow" />}

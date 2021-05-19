@@ -43,7 +43,7 @@ const Title = () => {
             className="title_gradientBtn"
             bg="gradient"
             role="link"
-            onClick={clickHandler}
+            handleClick={clickHandler}
           />
           <Button
             label="Learn More"
