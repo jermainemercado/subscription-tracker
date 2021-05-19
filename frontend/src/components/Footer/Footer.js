@@ -3,7 +3,26 @@ import React from 'react';
 import Button from '../common/Button';
 import subtract from '../../assets/images/subtract.svg';
 
+import { loadStripe } from '@stripe/stripe-js';
+const stripePromise = loadStripe('pk_test_yntCy3sFi63sgvtAxK7344Il')
+
 const Footer = () => {
+  const clickHandler = async (event) => {
+    console.log("Button clicked")
+    // fetch stripe promise
+    const stripe = await stripePromise;
+    // fetch our response from the BE endpoint, session  json
+    const response = await fetch('/payments/createCheckoutSession', { method: 'POST' });
+    const session = await response.json();
+
+    const result = await stripe.redirectToCheckout({
+      sessionId: session.id,
+    });
+    if (result.error) {
+      console.log(result.error)
+    }
+  };
+
   return (
     <div className="footer d-flex justify-content-between">
       <div className="text-center footer_centerSmBlock">
@@ -16,7 +35,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="footer_btnBlock">
-        <button className="footer_membershipBtn">
+        <button className="footer_membershipBtn" onClick={clickHandler}>
           <p>Buy Membership</p>
         </button>
         <Button

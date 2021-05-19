@@ -2,7 +2,28 @@ import React from 'react';
 import Button from '../common/Button';
 import arrow from '../../assets/images/arrow.svg';
 import ScrollAnimation from 'react-animate-on-scroll';
+
+import { loadStripe } from '@stripe/stripe-js';
+const stripePromise = loadStripe('pk_test_yntCy3sFi63sgvtAxK7344Il')
+
 const Title = () => {
+  
+  const clickHandler = async (event) => {
+    console.log("Button clicked")
+    // fetch stripe promise
+    const stripe = await stripePromise;
+    // fetch our response from the BE endpoint, session  json
+    const response = await fetch('/payments/createCheckoutSession', { method: 'POST' });
+    const session = await response.json();
+
+    const result = await stripe.redirectToCheckout({
+      sessionId: session.id,
+    });
+    if (result.error) {
+      console.log(result.error)
+    }
+  };
+
   return (
     <div className="title">
       <ScrollAnimation animateIn="fadeIn" duration={3}>
@@ -21,6 +42,8 @@ const Title = () => {
             label="Buy Membership"
             className="title_gradientBtn"
             bg="gradient"
+            role="link"
+            onClick={clickHandler}
           />
           <Button
             label="Learn More"
