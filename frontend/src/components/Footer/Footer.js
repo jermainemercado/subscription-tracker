@@ -12,7 +12,7 @@ const Footer = () => {
     // fetch stripe promise
     const stripe = await stripePromise;
     // fetch our response from the BE endpoint, session  json
-    const response = await fetch('/payments/createCheckoutSession', { method: 'POST' });
+    const response = await fetch('/payment/createCheckoutSession', { method: 'POST' });
     const session = await response.json();
 
     const result = await stripe.redirectToCheckout({
