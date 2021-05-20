@@ -51,19 +51,23 @@ const DashboardBody = () => {
           <div className="d-flex mt-4">
             <div className="mr-5">
               <label>Key Type</label>
-              <h6>Monthly</h6>
+              <h6>{discordUser.lifetimePayment === true ? 'Lifetime' : 'Monthly'}</h6>
             </div>
-            <div>
-              <label>Subscription Start Date</label>
-              <h6>February 10th, 2021</h6>
-            </div>
+            {(!discordUser.lifetimePayment) && (
+              <div>
+                <label>Subscription Start Date</label>
+                <h6>February 10th, 2021</h6>
+              </div>
+            )}
           </div>
         </Col>
         <Col lg={4} md={6}>
-          <div className=" mt-4">
-            <label>Next Renewal </label>
-            <h6>March 10th, 2021</h6>
-          </div>
+          {(!discordUser.lifetimePayment) && (
+            <div className=" mt-4">
+              <label>Next Renewal </label>
+              <h6>March 10th, 2021</h6>
+            </div>
+          )}
         </Col>
       </Row>
       <Row>

@@ -5,10 +5,12 @@ const mongoose = require('mongoose')
  *  discordId
  *  Username
  *  Link to Avatar
+ *  
+ *  Payment type
  *  Payment method: Default is stripe/card
  *  Paymentresult: payment id, payment status, update_time, email address,
  *  firstpayment: Date of first payment (stripe api for this)
- * 
+ *  
  * LicenseKey
  */
 
@@ -27,6 +29,7 @@ const DiscordUserSchema = new mongoose.Schema({
         update_time: String,
         email_address: String,
     },
+    lifetimePayment: {type: Boolean, required: true, default: false},
     firstPayment: { type: String, default: false },
     nextPayment: { type: String, default: false },
     licenseKey: {type: String, default: 'TK-12345-67890-ABCDE'}
