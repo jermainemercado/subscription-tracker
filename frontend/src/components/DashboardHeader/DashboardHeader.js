@@ -1,8 +1,27 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import logo from 'assets/images/logo.svg';
 import avatar from 'assets/images/userAvatar.svg';
+import Axios from 'axios';
 
 const DashboardHeader = ({ userAvatar = avatar, userName, userNumber }) => {
+
+  const [discordUser, setDiscordUser] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [avatar, setAvatar] =  useState(userAvatar)
+
+  const fetchUserData = async () => {
+    await Axios.get('/dashboard/getInfo')
+      .then(res => {
+        setDiscordUser(res.data.userInfo)
+        setAvatar(res.data.userInfo.userAvatar)
+      })
+  }
+
+  useEffect(() => {
+    fetchUserData()
+    setLoading(false)
+  }, [])
+  
   return (
     <div className="dashboardheader">
       <div className="dashboardheader_brand">
@@ -13,11 +32,11 @@ const DashboardHeader = ({ userAvatar = avatar, userName, userNumber }) => {
       <div className="dashboardheader_user">
         <div>
           <h6>Welcome,</h6>
-          <h5>Lucas</h5>
-          <p>#5678</p>
+          <h5>{discordUser.username ? discordUser.username : 'Lucas' }</h5>
+          <p>{discordUser.discordHash ? '#' + discordUser.discordHash : '#5678'}</p>
         </div>
         <div className="dashboardheader_user_avatar">
-          <img src={userAvatar} alt="userAvatar" />
+          <img src={avatar} alt="userAvatar" />
         </div>
       </div>
     </div>

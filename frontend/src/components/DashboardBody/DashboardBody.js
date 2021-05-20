@@ -1,14 +1,32 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { Row, Col } from 'reactstrap';
 import Button from '../common/Button';
 import arrow from '../../assets/images/arrow.svg';
 import whitelogo from 'assets/images/whitelogo.svg';
+import Axios from 'axios';
+
 
 const DashboardBody = () => {
+  
+  const [discordUser, setDiscordUser] = useState({});
+  const [loading, setLoading] = useState(true);
+
   function joinClickHandler() {
     console.log("redirecting")
     window.location.href = "https://discord.gg/AFb4fKvR4W";
   }
+
+  const fetchUserData = async () => {
+    await Axios.get('/dashboard/getInfo')
+      .then(res => {
+        setDiscordUser(res.data.userInfo)
+      })
+  }
+
+  useEffect(() => {
+    fetchUserData()
+    setLoading(false)
+  }, [])
 
   return (
     <div className="dashboardbody">
@@ -16,14 +34,14 @@ const DashboardBody = () => {
         <Col lg={5} md={6}>
           <div>
             <label>Your License Key</label>
-            <div className="dashboardbody_licensekey">TK-7PA97-1AS12-6JS89</div>
+            <div className="dashboardbody_licensekey">{discordUser.licenseKey ? discordUser.licenseKey : 'TK-7PA97-1AS12-6JS89' }</div>
           </div>
         </Col>
         <Col lg={4} md={6}>
           <div className="mt-4">
             <div className="mr-5">
               <label>Email Address</label>
-              <h6>lkdesignsolutions@gmail.com</h6>
+              <h6>{discordUser.email ? discordUser.email : 'lkdesignsolutions@gmail.com' }</h6>
             </div>
           </div>
         </Col>

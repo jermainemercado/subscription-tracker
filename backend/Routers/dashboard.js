@@ -1,12 +1,11 @@
 const router = require('express').Router();
-
 let loggedIn = false;
 
 function isAuth(req, res, next) {
     if (req.user) {
         console.log('User logged in')
         next()
-    } else { //TODO: bugfix the req.user not showing up here...
+    } else {
         console.log('User not logged in')
         res.redirect('/auth')
         next()
@@ -14,7 +13,9 @@ function isAuth(req, res, next) {
 }
 
 router.get('/getInfo', isAuth, (req, res) => {
-    res.send(req.user)
+    console.log(req.user)
+    let userInfo = req.user
+    res.send({userInfo})
 })
 
 router.get('/joinserver', isAuth, (req, res) => {

@@ -22,7 +22,7 @@ passport.use(new DiscordStrategy({
 }, async (accessToken, refreshToken, profile, done) => {
     try {
         const user = await DiscordUser.findOne({ discordId: profile.id });
-        let avatar = 'https://cdn.discordapp.com/avatars/' + profile.id + '/' + profile.avatar;
+        let avatar = 'https://cdn.discordapp.com/avatars/' + profile.id + '/' + profile.avatar + '.png';
         //console.log(profile)
         if (user) {
             done(null, user);

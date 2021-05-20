@@ -8,6 +8,8 @@ const mongoose = require('mongoose')
  *  Payment method: Default is stripe/card
  *  Paymentresult: payment id, payment status, update_time, email address,
  *  firstpayment: Date of first payment (stripe api for this)
+ * 
+ * LicenseKey
  */
 
 const DiscordUserSchema = new mongoose.Schema({
@@ -27,6 +29,7 @@ const DiscordUserSchema = new mongoose.Schema({
     },
     firstPayment: { type: String, default: false },
     nextPayment: { type: String, default: false },
+    licenseKey: {type: String, default: 'TK-12345-67890-ABCDE'}
 });
 
 const DiscordUser = module.exports = mongoose.model('User', DiscordUserSchema)
