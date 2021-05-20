@@ -4,15 +4,20 @@ const mongoose = require('mongoose')
  *  Database schema for users
  *  discordId
  *  Username
+ *  Link to Avatar
  *  Payment method: Default is stripe/card
  *  Paymentresult: payment id, payment status, update_time, email address,
- *  firstpayment: Date of first payment
- *  nextPayment: optional (requires additional updating within the database)
+ *  firstpayment: Date of first payment (stripe api for this)
  */
 
 const DiscordUserSchema = new mongoose.Schema({
     discordId: { type: String, required: true },
     username: { type: String, required: true },
+    avatarLink: { type: String, required: true },
+    email: { type: String, required: true },
+    discordHash: { type: String, required: true },
+    
+    paymentEmail: { type: String },
     paymentMethod: { type: String, required: false },
     paymentResult: {
         id: String,

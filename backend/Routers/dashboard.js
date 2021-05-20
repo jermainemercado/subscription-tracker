@@ -13,15 +13,8 @@ function isAuth(req, res, next) {
     }
 }
 
-router.get('/', (req, res) => {
-    if (req.user && loggedIn === false) {
-        console.log('User logged in')
-        loggedIn = true;
-        res.redirect('/')
-    } else if (!req.user){ //TODO: bugfix the req.user not showing up here...
-        console.log('User not logged in')
-        res.redirect('/auth')
-    }
+router.get('/getInfo', isAuth, (req, res) => {
+    res.send(req.user)
 })
 
 router.get('/joinserver', isAuth, (req, res) => {
