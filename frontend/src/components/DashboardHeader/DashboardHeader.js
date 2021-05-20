@@ -7,13 +7,11 @@ const DashboardHeader = ({ userAvatar = avatar, userName, userNumber }) => {
 
   const [discordUser, setDiscordUser] = useState({});
   const [loading, setLoading] = useState(true);
-  const [avatar, setAvatar] =  useState(userAvatar)
 
   const fetchUserData = async () => {
     await Axios.get('/dashboard/getInfo')
       .then(res => {
         setDiscordUser(res.data.userInfo)
-        setAvatar(res.data.userInfo.userAvatar)
       })
   }
 
@@ -36,7 +34,7 @@ const DashboardHeader = ({ userAvatar = avatar, userName, userNumber }) => {
           <p>{discordUser.discordHash ? '#' + discordUser.discordHash : '#5678'}</p>
         </div>
         <div className="dashboardheader_user_avatar">
-          <img src={avatar} alt="userAvatar" />
+          <img src={discordUser.avatarLink ? discordUser.avatarLink : userAvatar} alt="" />
         </div>
       </div>
     </div>
