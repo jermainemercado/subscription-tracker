@@ -17,17 +17,17 @@ router.get('/getInfo', isAuth, (req, res) => {
     res.send({userInfo})
 })
 
-router.get('/joinserver', isAuth, (req, res) => {
-    //TODO: guild.join
-})
-
 router.get('/cancelSub', isAuth, (req, res) => {
     //TODO: cancel stripe billing
 })
 
 router.get('/logout', isAuth, (req, res) => {
-    req.session.destroy();
-    res.send({message: 'Logout successful'})
+    if (req.user) {
+        req.logout();
+        res.redirect('/')
+    } else {
+        res.redirect('/')
+    }
 })
 
 router.get('/updatePayment', isAuth, (req, res) => {
