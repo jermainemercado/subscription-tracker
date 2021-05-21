@@ -5,15 +5,21 @@ import arrow from '../../assets/images/arrow.svg';
 import whitelogo from 'assets/images/whitelogo.svg';
 import Axios from 'axios';
 
-
 const DashboardBody = () => {
   
   const [discordUser, setDiscordUser] = useState({});
   const [loading, setLoading] = useState(true);
 
   function joinClickHandler() {
-    console.log("redirecting")
     window.location.href = "https://discord.gg/AFb4fKvR4W";
+  }
+
+  const logoutOnClick = async () => {
+    await Axios.get('/dashboard/logout')
+    .then(res => {
+      console.log(res.data.message)
+    })
+    window.location.href = '/';
   }
 
   const fetchUserData = async () => {
@@ -71,35 +77,40 @@ const DashboardBody = () => {
         </Col>
       </Row>
       <Row>
-        <Col lg={5} md={6}>
-          <div className="dashboardbody_card">
-            <img
-              src={whitelogo}
-              alt="whitelogo"
-              className="dashboardbody_card_logo"
-            />
-            <h4>John J. Doe</h4>
-            <h3>···· ···· ···· 1234</h3>
-            <div className="dashboardbody_card_paymentButton">
-              <Button
-                label="Update Payment Method"
-                className="title_gradientBorderBtn"
-                border="gradient"
-                icon={arrow}
-                iconClassName="title_gradientBorderBtn-icon ml-3"
+        {!discordUser.lifetimePayment && (
+          <Col lg={5} md={6}>
+            <div className="dashboardbody_card">
+              <img
+                src={whitelogo}
+                alt="whitelogo"
+                className="dashboardbody_card_logo"
               />
+              <h4>John J. Doe</h4>
+              <h3>···· ···· ···· 1234</h3>
+              <div className="dashboardbody_card_paymentButton">
+                <Button
+                  label="Update Payment Method"
+                  className="title_gradientBorderBtn"
+                  border="gradient"
+                  icon={arrow}
+                  iconClassName="title_gradientBorderBtn-icon ml-3"
+                />
+              </div>
             </div>
-          </div>
-        </Col>
+          </Col>
+        )}
+
         <Col lg={4} md={6}>
           <div>
-              <button className="dashboardbody_button dashboardbody_button-join">
+              <button className="dashboardbody_button dashboardbody_button-join" onClick={joinClickHandler}>
                 Join Discord
               </button>
-            <button className="dashboardbody_button dashboardbody_button-cancel">
-              Cancel Subscription
-            </button>
-            <button className="dashboardbody_button dashboardbody_button-logout">
+            {!discordUser.lifetimePayment && (
+              <button className="dashboardbody_button dashboardbody_button-cancel">
+                Cancel Subscription
+              </button>
+            )}
+            <button className="dashboardbody_button dashboardbody_button-logout" onClick={logoutOnClick}>
               Log Out
             </button>
           </div>
