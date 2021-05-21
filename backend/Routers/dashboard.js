@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const session = require('express-session');
 let loggedIn = false;
 
 function isAuth(req, res, next) {
@@ -23,6 +24,10 @@ router.get('/cancelSub', isAuth, (req, res) => {
 
 router.get('/logout', isAuth, (req, res) => {
     if (req.user) {
+        req.session.destroy(function (err) {
+            if (err) return console.log(err)
+            return;
+        });
         req.logout();
         res.redirect('/')
     } else {
