@@ -21,14 +21,8 @@ const DiscordUserSchema = new mongoose.Schema({
     email: { type: String, required: true },
     discordHash: { type: String, required: true },
     
-    paymentEmail: { type: String },
-    paymentMethod: { type: String, required: false },
-    paymentResult: {
-        id: String,
-        status: String,
-        update_time: String,
-        email_address: String,
-    },
+    isPaid: {type: Boolean, default: false},
+    
     lifetimePayment: {type: Boolean, required: true, default: false},
     firstPayment: { type: String, default: false },
     nextPayment: { type: String, default: false },

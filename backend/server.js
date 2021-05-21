@@ -28,6 +28,12 @@ app.use(session({
     name: 'discord.oauth2',
 }))
 
+// headers
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
+    next()
+})
+
 // passport/session
 app.use(passport.initialize());
 app.use(passport.session());

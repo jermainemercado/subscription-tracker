@@ -48,9 +48,9 @@ const Header = () => {
           </Nav>
         </Collapse>
         <Nav>
-          <Link to="/dashboard">
+          <a onClick={() => {window.location.href="/dashboard"}}>
             <Button label="Dashboard" />
-          </Link>
+          </a>
         </Nav>
       </Navbar>
     </div>

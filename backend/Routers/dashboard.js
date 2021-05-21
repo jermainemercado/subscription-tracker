@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const session = require('express-session');
 let loggedIn = false;
+const path = require("path")
+const root = path.join(path.resolve(), '../ticketkings/frontend/build')
 
 function isAuth(req, res, next) {
     if (req.user && req.user !== null) {
@@ -11,6 +13,10 @@ function isAuth(req, res, next) {
         res.redirect('/auth')
     }
 }
+
+router.get('/', isAuth, (req, res) => {
+    res.status(200).sendFile('index.html', {root})
+})
 
 router.get('/getInfo', isAuth, (req, res) => {
     //console.log(req.user)

@@ -14,14 +14,6 @@ const DashboardBody = () => {
     window.location.href = "https://discord.gg/AFb4fKvR4W";
   }
 
-  const logoutOnClick = async () => {
-    await Axios.get('/dashboard/logout')
-    .then(res => {
-      console.log(res.data.message)
-    })
-    window.location.href = '/';
-  }
-
   const fetchUserData = async () => {
     await Axios.get('/dashboard/getInfo')
       .then(res => {
@@ -110,9 +102,12 @@ const DashboardBody = () => {
                 Cancel Subscription
               </button>
             )}
-            <button className="dashboardbody_button dashboardbody_button-logout" onClick={logoutOnClick}>
-              Log Out
-            </button>
+            <form action="/dashboard/logout">
+              <button className="dashboardbody_button dashboardbody_button-logout" type="submit">
+                Log Out
+              </button>
+            </form>
+
           </div>
         </Col>
       </Row>

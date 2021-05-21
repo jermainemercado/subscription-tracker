@@ -9,7 +9,6 @@ router.post('/createCheckoutSession', async (req, res) => {
             payment_intent_data: {
                 setup_future_usage: 'off_session',
             },
-            customer: 'cus123',
             payment_method_types: ['card'],
             line_items: [
                 {
@@ -28,7 +27,7 @@ router.post('/createCheckoutSession', async (req, res) => {
             cancel_url: "http://localhost:3000",
         });
         res.json({ id: session.id })
-        //console.log(res)
+        console.log(res)
         console.log('success')
     } catch (err) {
         console.log(err.message)

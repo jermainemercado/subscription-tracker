@@ -1,26 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import Axios from 'axios';
+import cookie from 'react-cookies'
 
 const ProtectedRoute = ({ component: Component, ...rest}) => {
-    const [authStatus, setAuthStatus] = useState({});
+    const [authStatus, setAuthStatus] = useState(undefined); // undefined = no auth, cookie value = auth
     const checkAuthStatus = async () => {
         await Axios.get('/dashboard/getInfo')
         .then(res => {
             console.log(res);
             setAuthStatus(res.data.userInfo);
+            console.log(authStatus)
         })
         .catch(function (error) {
             console.log(error);
         });
     }
-    //TO DO: Call checkAuthStatus and check if user is authenticated to determine whether or not to redirect.
+    const pingCookie = () => {
+        console.log(cookie.load('discord.oauth2'))
+        setAuthStatus(cookie.load('discord.oauth2'))
+    }
+
     return (
         <Route {...rest}
         render = {props => {
             //if (false) {
             //Check if user is authenticated
-            if (false) {
+            if (authStatus) {
                 return <Component {...rest} {...props} />
             } else {
                 return <Redirect to = '/auth'/>
