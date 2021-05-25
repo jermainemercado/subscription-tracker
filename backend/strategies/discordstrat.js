@@ -3,6 +3,38 @@ const passport = require('passport');
 const DiscordUser = require('../database/Schemas/discordUser.js');
 const stripe = require('stripe')(process.env.STRIPE_API_KEY_SECRET)
 
+// generates a random key from a-z A-Z 0-9
+function generateLicenseKey() {
+    let chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let key = [];
+    //console.log(key)
+    for (let i = 0; i < 21; i++) {
+        switch (i) {
+            case 0:
+                key.push('T');
+                break;
+            case 1:
+                key.push('K');
+                break;
+            case 2 || 8 || 14:
+                key.push('-');
+                break;
+            case 8 :
+                key.push('-');
+                break;
+            case 14:
+                key.push('-');
+                break;
+            default:
+                key.push(chars.charAt(Math.floor(Math.random() * chars.length)))
+                break;
+        }
+    }
+    var concat = key.join('')
+    //console.log(concat)
+    return concat;
+}
+
 passport.serializeUser((user, done) => {
     console.log("Serializing user")
     done(null, user.id);
@@ -25,7 +57,6 @@ passport.use(new DiscordStrategy({
     try {
         const user = await DiscordUser.findOne({ discordId: profile.id });
         let avatar = 'https://cdn.discordapp.com/avatars/' + profile.id + '/' + profile.avatar + '.png';
-        //console.log(req.session)
         if (user) {
             done(null, user);
         } else {
@@ -40,6 +71,7 @@ passport.use(new DiscordStrategy({
                 discordHash: profile.discriminator,
                 stripe_id: req.session.stripe_id,
                 lifetimePayment: req.session.lifetimePayment,
+                licenseKey: generateLicenseKey(),
             })
             const savedUser = await newUser.save();
             done(null, savedUser);
