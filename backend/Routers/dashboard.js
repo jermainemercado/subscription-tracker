@@ -14,6 +14,10 @@ function isAuth(req, res, next) {
     }
 }
 
+function isMonthlyBilling(req, res, next) {
+    //TODO: Verify that user is being billed monthly
+}
+
 router.get('/', isAuth, (req, res) => {
     res.status(200).sendFile('index.html', {root})
 })
@@ -24,7 +28,7 @@ router.get('/getInfo', isAuth, (req, res) => {
     res.send({userInfo})
 })
 
-router.get('/cancelSub', isAuth, (req, res) => {
+router.get('/cancelSub', isAuth, isMonthlyBilling, (req, res) => {
     //TODO: cancel stripe billing
 })
 
@@ -41,7 +45,7 @@ router.get('/logout', isAuth, (req, res) => {
     }
 })
 
-router.get('/updatePayment', isAuth, (req, res) => {
+router.get('/updatePayment', isAuth, isMonthlyBilling, (req, res) => {
     //TODO: Change Stripe payment method
 })
 

@@ -13,19 +13,21 @@ const mongoose = require('mongoose')
  *  
  * LicenseKey
  */
-
 const DiscordUserSchema = new mongoose.Schema({
     discordId: { type: String, required: true },
     username: { type: String, required: true },
     avatarLink: { type: String, required: true },
     email: { type: String, required: true },
     discordHash: { type: String, required: true },
+
+    stripe_id: {type: String, default: 'none'},
+    lifetimePayment: { type: Boolean, required: true, default: false },
     
-    isPaid: {type: Boolean, default: false},
-    
-    lifetimePayment: {type: Boolean, required: true, default: false},
+    // for subscriptions
     firstPayment: { type: String, default: false },
     nextPayment: { type: String, default: false },
+
+    //TODO: Generate this
     licenseKey: {type: String, default: 'TK-12345-67890-ABCDE'}
 });
 
