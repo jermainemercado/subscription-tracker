@@ -25,7 +25,6 @@ const DiscordUserSchema = new mongoose.Schema({
     
     // for subscriptions
     firstPayment: { type: String, default: false },
-    nextPayment: { type: String, default: false },
 
     //TODO: Generate this
     licenseKey: {type: String, default: 'TK-12345-67890-ABCDE'}

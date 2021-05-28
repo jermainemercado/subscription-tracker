@@ -1,8 +1,6 @@
 const DiscordStrategy = require('passport-discord').Strategy;
 const passport = require('passport');
 const DiscordUser = require('../database/Schemas/discordUser.js');
-const stripe = require('stripe')(process.env.STRIPE_API_KEY_SECRET)
-
 // generates a random key from a-z A-Z 0-9
 function generateLicenseKey() {
     let chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -60,9 +58,6 @@ passport.use(new DiscordStrategy({
         if (user) {
             done(null, user);
         } else {
-            const stripe_session = await stripe.checkout.sessions.retrieve(
-                req.session.stripe_id
-            );
             const newUser = await DiscordUser.create({
                 discordId: profile.id,
                 username: profile.username,
@@ -72,6 +67,7 @@ passport.use(new DiscordStrategy({
                 stripe_id: req.session.stripe_id,
                 lifetimePayment: req.session.lifetimePayment,
                 licenseKey: generateLicenseKey(),
+                firstPayment: req.session.startDate,
             })
             const savedUser = await newUser.save();
             done(null, savedUser);
