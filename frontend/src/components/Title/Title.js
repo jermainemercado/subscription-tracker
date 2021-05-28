@@ -7,7 +7,6 @@ import { loadStripe } from '@stripe/stripe-js';
 const stripePromise = loadStripe('pk_test_yntCy3sFi63sgvtAxK7344Il')
 
 const Title = () => {
-  
   const clickHandler = async (event) => {
     console.log("Button clicked")
     // fetch stripe promise

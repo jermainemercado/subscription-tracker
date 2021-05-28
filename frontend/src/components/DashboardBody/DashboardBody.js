@@ -4,14 +4,39 @@ import Button from '../common/Button';
 import arrow from '../../assets/images/arrow.svg';
 import whitelogo from 'assets/images/whitelogo.svg';
 import Axios from 'axios';
+import { TokenError } from 'passport-oauth2';
 
 const DashboardBody = () => {
   
   const [discordUser, setDiscordUser] = useState({});
   const [loading, setLoading] = useState(true);
 
-  function joinClickHandler() {
-    window.location.href = "https://discord.gg/AFb4fKvR4W";
+  async function joinClickHandler() {
+    const { REACT_APP_ROLE_ID } = process.env;
+    const { REACT_APP_GUILD_ID } = process.env;
+    let userId = discordUser.discordId;
+
+    await fetch(`https://discord.com/api/v8/guilds/${process.env.REACT_APP_GUILD_ID}/members/${userId}`, {
+      method: 'PUT',
+      headers: {
+        "Authorization": `Bot ${process.env.BOT_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        "access_token": TokenError,
+        "roles": [REACT_APP_ROLE_ID],
+      })
+    }).then((json) => {
+          console.log("added user to discord", json);
+        })
+      .catch(err => console.log(err))
+    await fetch(`https://discord.com/api/v8/guilds/${REACT_APP_GUILD_ID}/members/${userId}/roles/${REACT_APP_ROLE_ID}`, {
+      method: 'PUT',
+      headers: {
+        "Authorization": `Bot ${process.env.BOT_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+    }).catch(err => console.log(err))
   }
 
   const fetchUserData = async () => {
