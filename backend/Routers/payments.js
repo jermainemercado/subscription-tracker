@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const stripe = require('stripe')(process.env.STRIPE_API_KEY_SECRET)
+const DiscordUser = require('../database/Schemas/discordUser.js');
 
 router.post('/createCheckoutSession', async (req, res) => {
     console.log('creating stripe session')
@@ -76,10 +77,24 @@ router.post('/webhook', async (req, res) => {
     }
 }) 
 
-router.post('/cancelPayment', async (req, res) => {
-    const deletedSub = await stripe.subscriptions.del(
-        //TODO: get subscription name from MONGODB, store here
-    )
+router.post('/cancelSub', async (req, res) => {
+    const discordId = req.query.discordId
+    console.log(discordId)
+    const discordUser = await DiscordUser.findOne({discordId: req.body.discordId})
+    /*
+    if (discordUser) {
+        try {
+            const deletedSub = await stripe.subscriptions.del(
+                discordUser.stripe_id
+            )
+        } catch (err) {
+            console.log(err)
+        }
+        res.send({message: "Payment cancelled successfully"})
+    } else {
+        res.send({message: "User does not exist"})
+    }
+    */
 })
 
 module.exports = router;

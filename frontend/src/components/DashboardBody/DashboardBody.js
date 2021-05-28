@@ -11,6 +11,18 @@ const DashboardBody = () => {
   const [discordUser, setDiscordUser] = useState({});
   const [loading, setLoading] = useState(true);
 
+  async function cancelPaymentHandler() {
+    console.log(discordUser.discordId)
+    await Axios.post('/payment/cancelSub', {
+      discordId: discordUser.discordId, 
+    })
+      .then((res) => {
+      console.log(res)
+      }, (err) => {
+        console.log(err)
+    })
+  }
+
   async function joinClickHandler() {
     const { REACT_APP_ROLE_ID } = process.env;
     const { REACT_APP_GUILD_ID } = process.env;
@@ -123,7 +135,7 @@ const DashboardBody = () => {
                 Join Discord
               </button>
             {!discordUser.lifetimePayment && (
-              <button className="dashboardbody_button dashboardbody_button-cancel">
+              <button className="dashboardbody_button dashboardbody_button-cancel" onClick={cancelPaymentHandler}>
                 Cancel Subscription
               </button>
             )}
