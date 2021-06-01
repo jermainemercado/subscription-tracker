@@ -20,14 +20,16 @@ const DiscordUserSchema = new mongoose.Schema({
     email: { type: String, required: true },
     discordHash: { type: String, required: true },
 
-    stripe_id: {type: String, default: 'none'},
+    stripe_id: { type: String, default: 'none' },
+    stripe_subscription_id: { type: String, default: 'none' },
+
     lifetimePayment: { type: Boolean, required: true, default: false },
     
-    // for subscriptions
     firstPayment: { type: String, default: false },
-
-    //TODO: Generate this
-    licenseKey: {type: String, default: 'TK-12345-67890-ABCDE'}
+    currentPayment: {type: String, default: ''},
+    nextDue: {type: String, default: ''},
+    
+    licenseKey: { type: String, default: 'TK-12345-67890-ABCDE' }
 });
 
 const DiscordUser = module.exports = mongoose.model('User', DiscordUserSchema)

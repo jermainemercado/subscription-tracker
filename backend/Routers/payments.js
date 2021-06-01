@@ -25,11 +25,56 @@ router.post('/createCheckoutSession', async (req, res) => {
     let start = new Date().toISOString().substring(0,10)
     req.session.startDate = start;
     req.session.stripe_id = session.id
+
+    //console.log(session)
+
     res.json({ id: session.id })
 })
 
 router.post('/webhook', async (req, res) => {
+    let data;
+    let eventType;
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+    if (webhookSecret) {
+        let event;
+        let signature = req.headers["stripe-signature"];
+        try {
+            event = stripe.webhooks.constructEvent(
+                req.body,
+                signature,
+                webhookSecret,
+            );
+        } catch (err) {
+            console.log('Webhook signature verification failed')
+            return res.sendStatus(400);
+        }
+        data = event;
+        eventType = event.type;
+    } else {
+        data = req.body.data;
+        eventType = req.body.type;
+    }
 
+    switch (eventType) {
+        case 'invoice.paid':
+            const user = await DiscordUser.findOne({ stripe_subscription_id: data.data.lines.subscription })
+            if (user) {
+                const subscription = await stripe.subscriptions.retrieve(
+                    user.stripe_subscription_id
+                )
+                user.currentPayment = new Date(subscription.current_period_start * 1000);
+                user.nextDue = new Date(subscription.current_period_end * 1000);
+            }
+            break;
+        case 'invoice.payment_failed':
+            //TODO: remove user from DB
+            //TODO: remove stripe payment
+            //TODO: remove user from discord
+            break;
+        default:
+            break;
+    }
+    res.json({recieved: true});
 })
 
 router.get('/status', async (req, res) => {
