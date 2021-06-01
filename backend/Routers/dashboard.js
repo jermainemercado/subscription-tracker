@@ -28,10 +28,6 @@ router.get('/getInfo', isAuth, (req, res) => {
     res.send({userInfo})
 })
 
-router.get('/cancelSub', isAuth, isMonthlyBilling, (req, res) => {
-    //TODO: cancel stripe billing
-})
-
 router.get('/logout', isAuth, (req, res) => {
     if (req.user) {
         req.session.destroy(function (err) {

@@ -10,6 +10,7 @@ const DashboardBody = () => {
   
   const [discordUser, setDiscordUser] = useState({});
   const [loading, setLoading] = useState(true);
+  const [paymentStatus, setPaymentStatus] = useState('')
 
   async function cancelPaymentHandler() {
     console.log(discordUser.discordId)
@@ -17,10 +18,24 @@ const DashboardBody = () => {
       discordId: discordUser.discordId, 
     })
       .then((res) => {
-      console.log(res)
+        console.log(res)
+        alert(res.data.message)
       }, (err) => {
         console.log(err)
+        alert(err.message)
     })
+  }
+
+  async function getPaymentStatus() {
+    await Axios.get('/payment/status', {
+      discordId: discordUser.discordId,
+    })
+      .then((res) => {
+        //console.log(res)
+        setPaymentStatus(res.data.paymentStatus)
+      }, (err) => {
+        console.log(err)
+      })
   }
 
   async function joinClickHandler() {
@@ -54,12 +69,14 @@ const DashboardBody = () => {
   const fetchUserData = async () => {
     await Axios.get('/dashboard/getInfo')
       .then(res => {
+        //console.log(res.data.userInfo)
         setDiscordUser(res.data.userInfo)
       })
   }
 
   useEffect(() => {
     fetchUserData()
+    getPaymentStatus()
     setLoading(false)
   }, [])
 
@@ -91,7 +108,7 @@ const DashboardBody = () => {
             {(!discordUser.lifetimePayment) && (
               <div>
                 <label>Subscription Start Date</label>
-                <h6>February 10th, 2021</h6>
+                <h6>{discordUser.firstPayment ? discordUser.firstPayment.substring(4,15) : ''}</h6>
               </div>
             )}
           </div>
@@ -100,7 +117,7 @@ const DashboardBody = () => {
           {(!discordUser.lifetimePayment) && (
             <div className=" mt-4">
               <label>Next Renewal </label>
-              <h6>March 10th, 2021</h6>
+              <h6>{discordUser.nextDue ? discordUser.nextDue.substring(4,15) : ''}</h6>
             </div>
           )}
         </Col>

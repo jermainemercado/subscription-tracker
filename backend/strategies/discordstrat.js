@@ -57,29 +57,35 @@ passport.use(new DiscordStrategy({
     try {
         const user = await DiscordUser.findOne({ discordId: profile.id });
         let avatar = 'https://cdn.discordapp.com/avatars/' + profile.id + '/' + profile.avatar + '.png';
-        const checkout = await stripe.checkout.sessions.retrieve(
-            req.session.stripe_id,
-        )
-        const subscription = await stripe.subscriptions.retrieve(
-            checkout.subscription,
-        )
-        let perEnd = new Date(subscription.current_period_end * 1000);
-        let perStart = new Date(subscription.current_period_start * 1000)
-        //console.log("Perstart " + perStart + " Per end " + perEnd)
+        
+        
         if (user) {
             done(null, user);
         } else {
+            const checkout = await stripe.checkout.sessions.retrieve(
+                req.session.stripe_id,
+            )
+            const subscription = await stripe.subscriptions.retrieve(
+                checkout.subscription,
+            )
+            let perEnd = new Date(subscription.current_period_end * 1000);
+            let perStart = new Date(subscription.current_period_start * 1000)
+            
             const newUser = await DiscordUser.create({
                 discordId: profile.id,
                 username: profile.username,
                 email: profile.email,
                 avatarLink: avatar,
                 discordHash: profile.discriminator,
-                stripe_id: req.session.stripe_id,
-                lifetimePayment: false,
-                licenseKey: generateLicenseKey(),
+                
                 firstPayment: perStart,
+                nextDue: perEnd,
+
                 stripe_subscription_id: subscription.id,
+                stripe_id: req.session.stripe_id,
+
+                licenseKey: generateLicenseKey(),
+                lifetimePayment: false,
             })
             const savedUser = await newUser.save();
             done(null, savedUser);
