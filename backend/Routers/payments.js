@@ -28,17 +28,31 @@ router.post('/createCheckoutSession', async (req, res) => {
     res.json({ id: session.id })
 })
 
-router.get('/status', async (req, res) => {
-    const discordId = req.body.discordId
-    console.log(discordId)
-    const discordUser = await DiscordUser.findOne({ discordId: req.body.discordId })
-    const checkout = await stripe.checkout.sessions.retrieve({
+router.post('/webhook', async (req, res) => {
 
-    })
+})
+
+router.get('/status', async (req, res) => {
+    //console.log(req.user.discordId)
+    const discordUser = await DiscordUser.findOne({ discordId: req.user.discordId })
+    
+    if (discordUser) {
+        try {
+            const checkout = await stripe.checkout.sessions.retrieve(
+                discordUser.stripe_id
+            )
+            //console.log(checkout)
+            res.send({message: "Found user", paymentStatus: checkout.payment_status})
+        } catch (err) {
+            console.log(err.message)
+        }
+        
+    } else {
+        res.send({message : 'Discord user not found'})
+    }
 })
 
 router.post('/cancelSub', async (req, res) => {
-    const discordId = req.body.discordId
     const discordUser = await DiscordUser.findOne({ discordId: req.body.discordId })
     if (discordUser) {
         try {
@@ -52,7 +66,7 @@ router.post('/cancelSub', async (req, res) => {
             console.log(err.message)
         }
         const deletedUser = await discordUser.remove();
-        res.send({ message: "Payment cancelled successfully", user: deletedUser})
+        res.send({ message: "Payment cancelled successfully"})
     } else {
         res.send({message: "User does not exist"})
     }
