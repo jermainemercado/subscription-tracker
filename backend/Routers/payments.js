@@ -24,27 +24,38 @@ router.post('/createCheckoutSession', async (req, res) => {
     //console.log(session.id)
     let start = new Date().toISOString().substring(0,10)
     req.session.startDate = start;
+    req.session.stripe_id = session.id
     res.json({ id: session.id })
 })
 
-router.post('/cancelSub', async (req, res) => {
-    const discordId = req.query.discordId
+router.get('/status', async (req, res) => {
+    const discordId = req.body.discordId
     console.log(discordId)
-    const discordUser = await DiscordUser.findOne({discordId: req.body.discordId})
-    /*
+    const discordUser = await DiscordUser.findOne({ discordId: req.body.discordId })
+    const checkout = await stripe.checkout.sessions.retrieve({
+
+    })
+})
+
+router.post('/cancelSub', async (req, res) => {
+    const discordId = req.body.discordId
+    const discordUser = await DiscordUser.findOne({ discordId: req.body.discordId })
     if (discordUser) {
         try {
-            const deletedSub = await stripe.subscriptions.del(
-                discordUser.stripe_id
+            const session = await stripe.checkout.sessions.retrieve(
+                discordUser.stripe_id,
+            )
+            const deletedSubscription = await stripe.subscriptions.del(
+                session.subscription
             )
         } catch (err) {
-            console.log(err)
+            console.log(err.message)
         }
-        res.send({message: "Payment cancelled successfully"})
+        const deletedUser = await discordUser.remove();
+        res.send({ message: "Payment cancelled successfully", user: deletedUser})
     } else {
         res.send({message: "User does not exist"})
     }
-    */
 })
 
 module.exports = router;

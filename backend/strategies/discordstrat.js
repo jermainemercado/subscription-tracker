@@ -65,7 +65,7 @@ passport.use(new DiscordStrategy({
                 avatarLink: avatar,
                 discordHash: profile.discriminator,
                 stripe_id: req.session.stripe_id,
-                lifetimePayment: req.session.lifetimePayment,
+                lifetimePayment: false,
                 licenseKey: generateLicenseKey(),
                 firstPayment: req.session.startDate,
             })

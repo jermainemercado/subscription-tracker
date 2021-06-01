@@ -13,6 +13,11 @@ const stripe = require('stripe')(process.env.STRIPE_API_KEY_SECRET)
 
 db.then(() => console.log('Connected to MongoDB')).catch(err => console.log(err))
 
+// Middleware
+app.use(express.static(root))
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
 // Routers
 const authRoute = require('./Routers/auth.js');
 const dashboardRoute = require('./Routers/dashboard.js');
@@ -41,11 +46,6 @@ app.use(passport.session());
 app.use('/auth', authRoute);
 app.use('/dashboard', dashboardRoute)
 app.use('/payment', paymentRoute);
-
-// Middleware
-app.use(express.static(root))
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
 
 app.get('*', (req, res) => {
     res.sendFile('index.html', {root})
