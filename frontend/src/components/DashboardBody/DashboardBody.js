@@ -11,6 +11,7 @@ const DashboardBody = () => {
   const [discordUser, setDiscordUser] = useState({});
   const [loading, setLoading] = useState(true);
   const [paymentStatus, setPaymentStatus] = useState('')
+  const [accessToken, setAccessToken] = useState('')
 
   async function cancelPaymentHandler() {
     console.log(discordUser.discordId)
@@ -42,12 +43,12 @@ const DashboardBody = () => {
     const { REACT_APP_ROLE_ID } = process.env;
     const { REACT_APP_GUILD_ID } = process.env;
     let userId = discordUser.discordId;
-
+    //console.log(accessToken)
     await fetch(`https://discord.com/api/v8/guilds/${process.env.REACT_APP_GUILD_ID}/members/${userId}`, {
       method: 'PUT',
       headers: {
-        "Authorization": `Bot ${process.env.BOT_TOKEN}`,
-        "Content-Type": "application/json",
+        "Authorization": `Bearer ${accessToken}`,
+        //"Content-Type": "application/json",
       },
       body: JSON.stringify({
         "access_token": TokenError,
@@ -60,8 +61,8 @@ const DashboardBody = () => {
     await fetch(`https://discord.com/api/v8/guilds/${REACT_APP_GUILD_ID}/members/${userId}/roles/${REACT_APP_ROLE_ID}`, {
       method: 'PUT',
       headers: {
-        "Authorization": `Bot ${process.env.BOT_TOKEN}`,
-        "Content-Type": "application/json",
+        "Authorization": `Bearer ${accessToken}`,
+        //"Content-Type": "application/json",
       },
     }).catch(err => console.log(err))
   }
@@ -69,8 +70,10 @@ const DashboardBody = () => {
   const fetchUserData = async () => {
     await Axios.get('/dashboard/getInfo')
       .then(res => {
+        console.log(res)
         //console.log(res.data.userInfo)
         setDiscordUser(res.data.userInfo)
+        setAccessToken(res.data.accessToken)
       })
   }
 

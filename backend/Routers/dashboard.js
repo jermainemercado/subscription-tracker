@@ -25,7 +25,9 @@ router.get('/', isAuth, (req, res) => {
 router.get('/getInfo', isAuth, (req, res) => {
     //console.log(req.user)
     let userInfo = req.user
-    res.send({userInfo})
+    let accessToken = req.session.token;
+    //console.log(req.session.token)
+    res.send({userInfo: userInfo, accessToken: accessToken})
 })
 
 router.get('/logout', isAuth, (req, res) => {

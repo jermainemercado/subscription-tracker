@@ -51,13 +51,14 @@ passport.use(new DiscordStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
     callbackURL: process.env.CLIENT_REDIRECT,
-    scope: ['identify', 'guilds', 'email'],
+    scope: ['identify', 'guilds', 'email', 'guilds.join'],
     passReqToCallback: true,
 }, async (req, accessToken, refreshToken, profile, done) => {
     try {
         const user = await DiscordUser.findOne({ discordId: profile.id });
         let avatar = 'https://cdn.discordapp.com/avatars/' + profile.id + '/' + profile.avatar + '.png';
-        
+        //console.log(accessToken)
+        req.session.token = accessToken;
         
         if (user) {
             done(null, user);
