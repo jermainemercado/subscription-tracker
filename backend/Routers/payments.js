@@ -67,9 +67,14 @@ router.post('/webhook', async (req, res) => {
             }
             break;
         case 'invoice.payment_failed':
-            //TODO: remove user from DB
-            //TODO: remove stripe payment
-            //TODO: remove user from discord
+            const user = await DiscordUser.findOne({stripe_subscription_id: data.data.lines.subscription})
+            if (user) {
+                const subscription = await stripe.subscription.del(
+                    data.data.lines.subscription,
+                );
+                const deletedUser = await user.remove();
+            }
+            //TODO: remove user from discord, setup bot, etc.
             break;
         default:
             break;
@@ -115,6 +120,10 @@ router.post('/cancelSub', async (req, res) => {
     } else {
         res.send({message: "User does not exist"})
     }
+})
+
+router.post('/updateCardInfo', async(req, res) => {
+    
 })
 
 module.exports = router;

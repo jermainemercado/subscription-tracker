@@ -42,7 +42,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build REACT_APP_GUILD_ID=844046205910646795 REACT_APP_ROLE_ID=847699330739339284",
+    "build": "react-scripts build REACT_APP_GUILD_ID=522054475444125706 REACT_APP_ROLE_ID=847699330739339284",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
