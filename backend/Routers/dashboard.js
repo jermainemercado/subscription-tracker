@@ -14,10 +14,6 @@ function isAuth(req, res, next) {
     }
 }
 
-function isMonthlyBilling(req, res, next) {
-    //TODO: Verify that user is being billed monthly
-}
-
 router.get('/', isAuth, (req, res) => {
     res.status(200).sendFile('index.html', {root})
 })
@@ -41,10 +37,6 @@ router.get('/logout', isAuth, (req, res) => {
     } else {
         res.redirect('/')
     }
-})
-
-router.get('/updatePayment', isAuth, isMonthlyBilling, (req, res) => {
-    //TODO: Change Stripe payment method
 })
 
 module.exports = router;

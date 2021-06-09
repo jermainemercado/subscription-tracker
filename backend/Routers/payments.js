@@ -57,13 +57,13 @@ router.post('/webhook', async (req, res) => {
 
     switch (eventType) {
         case 'invoice.paid':
-            const user = await DiscordUser.findOne({ stripe_subscription_id: data.data.lines.subscription })
+            const paidUser = await DiscordUser.findOne({ stripe_subscription_id: data.data.lines.subscription })
             if (user) {
                 const subscription = await stripe.subscriptions.retrieve(
-                    user.stripe_subscription_id
+                    paidUser.stripe_subscription_id
                 )
-                user.currentPayment = new Date(subscription.current_period_start * 1000);
-                user.nextDue = new Date(subscription.current_period_end * 1000);
+                paidUser.currentPayment = new Date(subscription.current_period_start * 1000);
+                paidUser.nextDue = new Date(subscription.current_period_end * 1000);
             }
             break;
         case 'invoice.payment_failed':
@@ -112,18 +112,38 @@ router.post('/cancelSub', async (req, res) => {
             const deletedSubscription = await stripe.subscriptions.del(
                 session.subscription
             )
+            console.log(deletedSubscription)
         } catch (err) {
             console.log(err.message)
         }
-        const deletedUser = await discordUser.remove();
+        //const deletedUser = await discordUser.remove();
         res.send({ message: "Payment cancelled successfully"})
     } else {
         res.send({message: "User does not exist"})
     }
 })
 
-router.post('/updateCardInfo', async(req, res) => {
-    
+router.post('/updateCardInfo', async (req, res) => {
+    const user = await DiscordUser.findOne({ discordId: req.user.discordId })
+    if (user) {
+        const session = await stripe.checkout.sessions.retrieve(
+            user.stripe_id
+        )
+        const sessions = await stripe.checkout.sessions.create({
+                payment_method_types: ['card'],
+                mode: 'setup',
+                customer: session.customer,
+                setup_intent_data: {
+                    metadata: {
+                        customer_id: session.customer,
+                        subscription_id: user.stripe_subscription_id,
+                    },
+                },
+                success_url: "http://localhost:3000/dashboard",
+                cancel_url: "http://localhost:3000",
+        }).catch((err) => console.log(err.message))
+        res.json({ id: sessions.id })
+    }
 })
 
 module.exports = router;

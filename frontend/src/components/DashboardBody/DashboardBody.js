@@ -6,6 +6,9 @@ import whitelogo from 'assets/images/whitelogo.svg';
 import Axios from 'axios';
 import { TokenError } from 'passport-oauth2';
 
+import { loadStripe } from '@stripe/stripe-js';
+const stripePromise = loadStripe('pk_test_yntCy3sFi63sgvtAxK7344Il')
+
 const DashboardBody = () => {
   
   const [discordUser, setDiscordUser] = useState({});
@@ -80,6 +83,18 @@ const DashboardBody = () => {
       })
   }
 
+  const updatePaymentInfo = async () => {
+    const stripe = await stripePromise;
+
+    const response = await fetch('/payment/updateCardInfo', {method: 'POST'})
+    const session = await response.json();
+
+    const { error } = await stripe.redirectToCheckout({
+      sessionId: session.id,
+    })
+
+  }
+
   useEffect(() => {
     fetchUserData()
     getPaymentStatus()
@@ -146,6 +161,7 @@ const DashboardBody = () => {
                   border="gradient"
                   icon={arrow}
                   iconClassName="title_gradientBorderBtn-icon ml-3"
+                  handleClick={updatePaymentInfo}
                 />
               </div>
             </div>
