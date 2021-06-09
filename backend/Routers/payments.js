@@ -123,12 +123,20 @@ router.post('/cancelSub', async (req, res) => {
     }
 })
 
+router.get('/fetchPaymentInfo', async (req, res) => {
+    const session = stripe.checkout.sessions.retrieve(
+        req.user.stripe_id
+    )
+    console.log(session)
+})
+
 router.post('/updateCardInfo', async (req, res) => {
     const user = await DiscordUser.findOne({ discordId: req.user.discordId })
     if (user) {
         const session = await stripe.checkout.sessions.retrieve(
             user.stripe_id
         )
+        console.log(session)
         const sessions = await stripe.checkout.sessions.create({
                 payment_method_types: ['card'],
                 mode: 'setup',
