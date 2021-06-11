@@ -1,2 +1,4 @@
 const mongoose = require('mongoose')
-module.exports = mongoose.connect('mongodb://localhost:27017/discordauth', { useNewUrlParser: true, useUnifiedTopology: true })
+require("dotenv").config()
+
+module.exports = mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
