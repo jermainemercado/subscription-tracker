@@ -3,7 +3,7 @@ require("dotenv").config()
 const express = require("express")
 const app = express()
 const path = require("path")
-const root = path.join(__dirname, './build')
+const root = './build'
 const port = process.env.PORT || 5000;
 const session = require('express-session');
 const passport = require('passport');
