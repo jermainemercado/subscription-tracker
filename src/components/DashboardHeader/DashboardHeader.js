@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import logo from 'assets/images/logo.svg';
-import avatar from 'assets/images/userAvatar.svg';
+import logo from '../../assets/images/logo.svg';
+import avatar from '../../assets/images/userAvatar.svg';
 import Axios from 'axios';
 
 const DashboardHeader = ({ userAvatar = avatar, userName, userNumber }) => {

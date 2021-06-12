@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { Row, Col } from 'reactstrap';
 import Button from '../common/Button';
 import arrow from '../../assets/images/arrow.svg';
-import whitelogo from 'assets/images/whitelogo.svg';
+import whitelogo from '../../assets/images/whitelogo.svg';
 import Axios from 'axios';
 import { TokenError } from 'passport-oauth2';
 

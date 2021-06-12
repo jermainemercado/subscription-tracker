@@ -12,7 +12,7 @@ import {
 } from 'reactstrap';
 import Button from '../common/Button';
 
-import logo from 'assets/images/logo.svg';
+import logo from '../../assets/images/logo.svg';
 
 const Header = () => {
   return (
