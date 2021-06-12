@@ -2,7 +2,7 @@ const router = require('express').Router();
 const session = require('express-session');
 let loggedIn = false;
 const path = require("path")
-const root = '../../build'
+const root = path.join(__dirname, '../../build')
 
 function isAuth(req, res, next) {
     if (req.user && req.user !== null) {

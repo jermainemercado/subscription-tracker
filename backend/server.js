@@ -3,7 +3,7 @@ require("dotenv").config()
 const express = require("express")
 const app = express()
 const path = require("path")
-const root = '../build'
+const root = path.join(__dirname, '../build')
 const port = process.env.PORT || 5000;
 const session = require('express-session');
 const passport = require('passport');
@@ -53,4 +53,5 @@ app.get('*', (req, res) => {
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`)
+    console.log(root);
 })
