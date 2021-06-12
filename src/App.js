@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
-import Main from 'views/main';
+import Main from './views/main';
 import ProtectedRoute from './components/ProtectedRoute';
 import Dashboard from 'views/dashboard';
 import './App.scss';
