@@ -4,14 +4,14 @@ import {
   useScrollSection,
   Section,
 } from 'react-scroll-section';
-import Header from 'components/Header';
-import Title from 'components/Title';
-import Aboutus from 'components/Aboutus';
-import Features from 'components/Features';
-import Testimonials from 'components/Testimonials';
-import Questions from 'components/Questions';
-import Updated from 'components/Updated';
-import Footer from 'components/Footer';
+import Header from '../../components/Header';
+import Title from '../../components/Title';
+import Aboutus from '../../components/Aboutus';
+import Features from '../../components/Features';
+import Testimonials from '../../components/Testimonials';
+import Questions from '../../components/Questions';
+import Updated from '../../components/Updated';
+import Footer from '../../components/Footer';
 
 const Main = () => {
   const aboutusSection = useScrollSection('aboutus');
