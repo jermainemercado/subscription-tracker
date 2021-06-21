@@ -1,16 +1,16 @@
 const router = require('express').Router();
 const session = require('express-session');
 let loggedIn = false;
-const path = require("path")
-const root = path.join(__dirname, '../../build')
+const path = require("path");
+const root = path.join(__dirname, '../../build');
 
 function isAuth(req, res, next) {
     if (req.user && req.user !== null) {
         //console.log('User logged in')
-        next()
+        next();
     } else {
         //console.log('User not logged in')
-        res.redirect('/auth')
+        res.redirect('/auth');
     }
 }
 
