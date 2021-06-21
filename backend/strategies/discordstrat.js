@@ -63,33 +63,35 @@ passport.use(new DiscordStrategy({
         if (user) {
             done(null, user);
         } else {
-            const checkout = await stripe.checkout.sessions.retrieve(
-                req.session.stripe_id,
-            )
-            const subscription = await stripe.subscriptions.retrieve(
-                checkout.subscription,
-            )
-            let perEnd = new Date(subscription.current_period_end * 1000);
-            let perStart = new Date(subscription.current_period_start * 1000)
+            if (req.session.stripe_id) {
+                const checkout = await stripe.checkout.sessions.retrieve(
+                    req.session.stripe_id,
+                )
+                const subscription = await stripe.subscriptions.retrieve(
+                    checkout.subscription,
+                )
+                let perEnd = new Date(subscription.current_period_end * 1000);
+                let perStart = new Date(subscription.current_period_start * 1000)
             
-            const newUser = await DiscordUser.create({
-                discordId: profile.id,
-                username: profile.username,
-                email: profile.email,
-                avatarLink: avatar,
-                discordHash: profile.discriminator,
-                
-                firstPayment: perStart,
-                nextDue: perEnd,
+                const newUser = await DiscordUser.create({
+                    discordId: profile.id,
+                    username: profile.username,
+                    email: profile.email,
+                    avatarLink: avatar,
+                    discordHash: profile.discriminator,
+                    
+                    firstPayment: perStart,
+                    nextDue: perEnd,
 
-                stripe_subscription_id: subscription.id,
-                stripe_id: req.session.stripe_id,
+                    stripe_subscription_id: subscription.id,
+                    stripe_id: req.session.stripe_id,
 
-                licenseKey: generateLicenseKey(),
-                lifetimePayment: false,
-            })
-            const savedUser = await newUser.save();
-            done(null, savedUser);
+                    licenseKey: generateLicenseKey(),
+                    lifetimePayment: false,
+                })
+                const savedUser = await newUser.save();
+                done(null, savedUser);
+            }
         }
     } catch (err) {
         console.log(err)
