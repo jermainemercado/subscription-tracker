@@ -50,28 +50,10 @@ const DashboardBody = () => {
     //console.log(userId)
     //console.log(accessToken)
     //console.log(accessToken)
-    await fetch(`https://discord.com/api/v8/guilds/${process.env.REACT_APP_GUILD_ID}/members/${userId}`, {
-      method: 'PUT',
-      headers: {
-        "Authorization": `${accessToken}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        "access_token": TokenError,
-        "roles": [REACT_APP_ROLE_ID],
-      })
-    }).then((json) => {
-          //console.log("added user to discord", json);
-        })
-      .catch(err => console.log(err))
-    await fetch(`https://discord.com/api/v8/guilds/${REACT_APP_GUILD_ID}/members/${userId}/roles/${REACT_APP_ROLE_ID}`, {
-      method: 'PUT',
-      headers: {
-        "Authorization": `${accessToken}`,
-        "Content-Type": "application/json",
-      },
-    }).catch(err => console.log(err))
+    await fetch(`/discordBot/joinDiscord?&user=${userId}&paymentInfo=${paymentStatus}&accessToken=${accessToken}`,
+    {method: 'GET'});
   }
+
 
   const fetchUserData = async () => {
     await Axios.get('/dashboard/getInfo')
@@ -107,7 +89,10 @@ const DashboardBody = () => {
         <Col lg={5} md={6}>
           <div>
             <label>Your License Key</label>
-            <div className="dashboardbody_licensekey">{discordUser.licenseKey ? discordUser.licenseKey : 'TK-7PA97-1AS12-6JS89' }</div>
+            {discordUser.licenseKey ? 
+            <div className="dashboardbody_licensekey">{discordUser.licenseKey }</div> 
+            : 'TK-7PA97-1AS12-6JS89'
+            }
           </div>
         </Col>
         <Col lg={4} md={6}>

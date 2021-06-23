@@ -18,8 +18,8 @@ router.post('/createCheckoutSession', async (req, res) => {
             },
         ],
         mode: 'subscription',
-        success_url: "http://ticketkings-test.herokuapp.com/dashboard",
-        cancel_url: "http://ticketkings-test.herokuapp.com",
+        success_url: "https://ticketkings-test.herokuapp.com/dashboard",
+        cancel_url: "https://ticketkings-test.herokuapp.com/",
     })
     //console.log(session.id)
     let start = new Date().toISOString().substring(0,10)

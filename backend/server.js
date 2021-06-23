@@ -22,6 +22,7 @@ app.use(express.urlencoded({ extended: true }))
 const authRoute = require('./Routers/auth.js');
 const dashboardRoute = require('./Routers/dashboard.js');
 const paymentRoute = require('./Routers/payments.js');
+const discordRoute = require('./Routers/discordBot.js');
 
 app.use(session({
     secret: 'secret',
@@ -46,6 +47,7 @@ app.use(passport.session());
 app.use('/auth', authRoute);
 app.use('/dashboard', dashboardRoute)
 app.use('/payment', paymentRoute);
+app.use('/discordBot', discordRoute);
 
 app.get('*', (req, res) => {
     res.sendFile('index.html', {root})
