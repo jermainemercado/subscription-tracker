@@ -51,7 +51,7 @@ passport.use(new DiscordStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
     callbackURL: `https://ticketkings-test.herokuapp.com/auth/redirect`,
-    scope: ['identify', 'guilds', 'email', 'guilds.join', 'bot'],
+    scope: ['identify', 'guilds', 'email', 'guilds.join'],
     passReqToCallback: true,
 }, async (req, accessToken, refreshToken, profile, done) => {
     try {
