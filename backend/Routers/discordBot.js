@@ -24,9 +24,6 @@ router.get('/joinDiscord', async (req, res) => {
                 }).then(res => {
                     console.log(res);
                     return res.json();
-                })
-                .then(json => {
-                    res.send(json);
                 }).catch(err => { 
                     console.log(err.headers.headers);
                     res.send(err);
