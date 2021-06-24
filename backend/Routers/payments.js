@@ -57,6 +57,8 @@ router.post('/webhook', async (req, res) => {
 
     switch (eventType) {
         case 'invoice.paid':
+            //TO-DO:
+            //Change so we only assign key to user from here not at DB serialization.
             const paidUser = await DiscordUser.findOne({ stripe_subscription_id: data.data.lines.subscription })
             if (user) {
                 const subscription = await stripe.subscriptions.retrieve(
@@ -72,14 +74,24 @@ router.post('/webhook', async (req, res) => {
                 const subscription = await stripe.subscription.del(
                     data.data.lines.subscription,
                 );
-                const deletedUser = await user.remove();
+                await fetch(`https://discord.com/api/v8/guilds/${process.env.REACT_APP_GUILD_ID}/members/${user.discordId}`, 
+                {
+                    method: 'DELETE',
+                    headers: {
+                        "Authorization": `Bot ${process.env.BOT_TOKEN}`,
+                        "Content-Type": "application/json"
+                    },
+                }).then(res => {
+                    console.log(res);
+                    return res.json();
+                })
             }
-            //TODO: remove user from discord, setup bot, etc.
+            await DiscordUser.deleteOne({stripe_subscription_id: data.data.lines.subscription});
             break;
         default:
             break;
     }
-    res.json({recieved: true});
+    res.json({received: true});
 })
 
 router.get('/status', async (req, res) => {
