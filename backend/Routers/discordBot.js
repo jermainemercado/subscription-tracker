@@ -23,10 +23,8 @@ router.get('/joinDiscord', async (req, res) => {
                     })
                 }).then(res => {
                     console.log(res);
-                    return res.json();
                 }).catch(err => { 
-                    console.log(err.headers);
-                    res.send(err);
+                    console.log(err)
                 });
 
                 await fetch(`https://discord.com/api/v8/guilds/${process.env.REACT_APP_GUILD_ID}/members/${curUser.discordId}/roles/${process.env.REACT_APP_ROLE_ID}`,
