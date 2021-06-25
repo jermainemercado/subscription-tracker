@@ -18,8 +18,8 @@ router.post('/createCheckoutSession', async (req, res) => {
             },
         ],
         mode: 'subscription',
-        success_url: `https://ticketkings-test.herokuapp.com/dashboard`,
-        cancel_url: `https://ticketkings-test.herokuapp.com/`,
+        success_url: `http://ticketkings.io/dashboard`,
+        cancel_url: `http://ticketkings.io/`,
     })
     //console.log(session.id)
     let start = new Date().toISOString().substring(0,10)
@@ -159,8 +159,8 @@ router.post('/updateCardInfo', async (req, res) => {
                         subscription_id: user.stripe_subscription_id,
                     },
                 },
-                success_url: `https://ticketkings-test.herokuapp.com/dashboard`,
-                cancel_url: `https://ticketkings-test.herokuapp.com/`,
+                success_url: `http://ticketkings.io/dashboard`,
+                cancel_url: `http://ticketkings.io/`,
         }).catch((err) => console.log(err.message))
         res.json({ id: sessions.id })
     }
