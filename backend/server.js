@@ -37,7 +37,7 @@ app.use(session({
 // headers
 app.use((req, res, next) => {
     //res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
-    res.setHeader('Access-Control-Allow-Origin', 'https://https://ticketkings-test.herokuapp.com/')
+    res.setHeader('Access-Control-Allow-Origin', 'http://ticketkings.io/')
     next()
 })
 

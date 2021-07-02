@@ -31,8 +31,8 @@ const Title = () => {
           <br /> Of Ticket Reselling
         </h1>
         <h5 className="mt-3">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          <br /> Et nunc, non nulla in turpis sed.
+        TicketKings has been the premier community for professional ticket brokers
+          <br /> and those new to the industry alike since 2018.
         </h5>
       </ScrollAnimation>
       <div className="title_btnBox">
