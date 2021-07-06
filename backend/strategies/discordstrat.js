@@ -51,7 +51,7 @@ passport.deserializeUser( async (id, done) => {
 passport.use(new DiscordStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: `http://ticketkings.io/auth/redirect`,
+    callbackURL: `https://ticketkings.io/auth/redirect`,
     scope: ['identify', 'guilds', 'email', 'guilds.join'],
     passReqToCallback: true,
 }, async (req, accessToken, refreshToken, profile, done) => {

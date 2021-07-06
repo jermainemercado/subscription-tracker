@@ -34,22 +34,29 @@ app.use(session({
     name: 'discord.oauth2',
 }))
 
+//force redirect to https.
+function requireHTTPS(req, res, next) {
+    // The 'x-forwarded-proto' check is for Heroku
+    if (!req.secure && req.get('x-forwarded-proto') !== 'https' && process.env.NODE_ENV !== "development") {
+        return res.redirect('https://' + req.get('host') + req.url);
+    }
+    next();
+}
 // headers
 app.use((req, res, next) => {
     //res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
-    res.setHeader('Access-Control-Allow-Origin', 'http://ticketkings.io/')
+    res.setHeader('Access-Control-Allow-Origin', 'https://ticketkings.io/')
     next()
 })
 
 // passport/session
 app.use(passport.initialize());
 app.use(passport.session());
-
 app.use('/auth', authRoute);
 app.use('/dashboard', dashboardRoute)
 app.use('/payment', paymentRoute);
 app.use('/discordBot', discordRoute);
-
+app.use(requireHTTPS);
 app.get('*', (req, res) => {
     res.sendFile('index.html', {root})
 })
