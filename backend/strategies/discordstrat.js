@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 const DiscordStrategy = require('passport-discord').Strategy;
 const passport = require('passport');
 const DiscordUser = require('../database/Schemas/discordUser.js');
@@ -36,14 +37,14 @@ function generateLicenseKey() {
 }
 
 passport.serializeUser((user, done) => {
-    console.log("Serializing user")
+    console.log("Serializing user");
     done(null, user.id);
 })
 
 passport.deserializeUser( async (id, done) => {
     const user = await DiscordUser.findById(id);
     if (user) {
-        done(null, user)
+        done(null, user);
     }
 })
 
@@ -59,42 +60,62 @@ passport.use(new DiscordStrategy({
         let avatar = 'https://cdn.discordapp.com/avatars/' + profile.id + '/' + profile.avatar + '.png';
         //console.log(accessToken)
         req.session.token = accessToken;
-        
+        let perEnd;
+        let perStart;
+
+        var subscription;
+        var checkout;
         if (user) {
+
+            if (req.session.stripe_id) {
+                checkout = await stripe.checkout.sessions.retrieve(
+                    req.session.stripe_id,
+                );
+                subscription = await stripe.subscriptions.retrieve(
+                    checkout.subscription,
+                );
+                perEnd = new Date(subscription.current_period_end * 1000);
+                perStart = new Date(subscription.current_period_start * 1000);
+            }
+            
+            user.firstPayment = (perStart === null || undefined) ? perStart : user.firstPayment;
+            user.nextDue = (perEnd === null || undefined) ? perEnd : user.nextDue;
+            user.stripe_subscription_id = (subscription.id === null || undefined) ? subscription.id : user.stripe_subscription_id;
+            user.stripe_id = (req.session.stripe_id === null || undefined) ? req.session.stripe_id : user.stripe_id;
+            const updatedUser = await user.save();
             done(null, user);
         } else {
             if (req.session.stripe_id) {
-                const checkout = await stripe.checkout.sessions.retrieve(
+                checkout = await stripe.checkout.sessions.retrieve(
                     req.session.stripe_id,
-                )
-                const subscription = await stripe.subscriptions.retrieve(
+                );
+                subscription = await stripe.subscriptions.retrieve(
                     checkout.subscription,
-                )
-                let perEnd = new Date(subscription.current_period_end * 1000);
-                let perStart = new Date(subscription.current_period_start * 1000)
-            
-                const newUser = await DiscordUser.create({
-                    discordId: profile.id,
-                    username: profile.username,
-                    email: profile.email,
-                    avatarLink: avatar,
-                    discordHash: profile.discriminator,
-                    
-                    firstPayment: perStart,
-                    nextDue: perEnd,
-
-                    stripe_subscription_id: subscription.id,
-                    stripe_id: req.session.stripe_id,
-
-                    licenseKey: generateLicenseKey(),
-                    lifetimePayment: false,
-                })
-                const savedUser = await newUser.save();
-                done(null, savedUser);
+                );
+                perEnd = new Date(subscription.current_period_end * 1000);
+                perStart = new Date(subscription.current_period_start * 1000);
             }
+            
+            const newUser = await DiscordUser.create({
+                discordId: profile.id,
+                username: profile.username,
+                email: profile.email,
+                avatarLink: avatar,
+                discordHash: profile.discriminator,
+                
+                firstPayment: (perStart === null || undefined) ? perStart : "none",
+                nextDue: (perEnd === null || undefined) ? perEnd : "none",
+
+                stripe_subscription_id: (subscription.id === null || undefined) ? subscription.id : "none",
+                stripe_id: (req.session.stripe_id === null || undefined) ? req.session.stripe_id : "none",
+
+                licenseKey: generateLicenseKey(),
+                lifetimePayment: false,
+            })
+            const savedUser = await newUser.save();
+            done(null, savedUser);
         }
     } catch (err) {
-        console.log(err)
         done(err, null);
     }
 }))
