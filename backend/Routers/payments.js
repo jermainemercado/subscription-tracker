@@ -1,8 +1,7 @@
 const router = require('express').Router();
-const stripe = require('stripe')(process.env.STRIPE_API_KEY_SECRET)
+const stripe = require('stripe')(process.env.REACT_STRIPE_KEY_PUBLIC)
 const DiscordUser = require('../database/Schemas/discordUser.js');
 const bodyParser = require("body-parser");
-const webhookSecret = process.env.STRIPE_WEBHOOK;
 
 router.post('/createCheckoutSession', async (req, res) => {
     console.log('creating stripe session')
