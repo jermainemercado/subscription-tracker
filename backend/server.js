@@ -56,7 +56,6 @@ app.use('/auth', authRoute);
 app.use('/dashboard', dashboardRoute)
 app.use('/payment', paymentRoute);
 app.use('/discordBot', discordRoute);
-app.use(requireHTTPS);
 app.get('*', (req, res) => {
     res.sendFile('index.html', {root})
 })
