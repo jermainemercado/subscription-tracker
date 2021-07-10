@@ -10,11 +10,10 @@ const passport = require('passport');
 const discordStrategy = require('./strategies/discordstrat.js');
 const db = require('./database/database.js');
 const stripe = require('stripe')(process.env.REACT_STRIPE_KEY_PUBLIC)
-const http = require('http');
-const enforce = require('express-sslify');
-
-
-
+const forceSSL = require('express-force-ssl');
+var fs = require('fs');
+var http = require('http');
+var https = require('https');
 
 db.then(() => console.log('Connected to MongoDB')).catch(err => console.log(err))
 
@@ -46,9 +45,6 @@ app.use((req, res, next) => {
     next()
 })
 
-//Enforce SSL
-
-
 // passport/session
 app.use(passport.initialize());
 app.use(passport.session());
@@ -60,10 +56,7 @@ app.get('*', (req, res) => {
     res.sendFile('index.html', {root})
 })
 
-// Use enforce.HTTPS({ trustProtoHeader: true }) in case you are behind
-// a load balancer (e.g. Heroku). See further comments below
-app.use(enforce.HTTPS());
-
-http.createServer(app).listen(app.get(process.env.PORT), function() {
-    console.log('Express server listening on port ' + process.env.PORT);
-});
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`)
+    console.log(root);
+})
