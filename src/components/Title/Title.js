@@ -4,7 +4,7 @@ import arrow from '../../assets/images/arrow.svg';
 import ScrollAnimation from 'react-animate-on-scroll';
 
 import { loadStripe } from '@stripe/stripe-js';
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC)
+const stripePromise = loadStripe('pk_test_yntCy3sFi63sgvtAxK7344Il')
 
 const Title = () => {
     const [agreementChecked, setAgreementChecked] = useState(false);
