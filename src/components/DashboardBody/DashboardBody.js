@@ -7,7 +7,7 @@ import Axios from 'axios';
 import { TokenError } from 'passport-oauth2';
 
 import { loadStripe } from '@stripe/stripe-js';
-const stripePromise = (process.env.REACT_APP_STRIPE_PUBLIC);
+const stripePromise = loadStripe('pk_live_vT1modzZGZWzOym9HuzwH8rt');
 
 const DashboardBody = () => {
   
