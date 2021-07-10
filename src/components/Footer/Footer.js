@@ -4,7 +4,7 @@ import Button from '../common/Button';
 import subtract from '../../assets/images/subtract.svg';
 
 import { loadStripe } from '@stripe/stripe-js';
-const stripePromise = loadStripe('pk_test_yntCy3sFi63sgvtAxK7344Il')
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC);
 
 const Footer = () => {
   const clickHandler = async (event) => {
