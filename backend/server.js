@@ -10,11 +10,13 @@ const passport = require('passport');
 const discordStrategy = require('./strategies/discordstrat.js');
 const db = require('./database/database.js');
 const stripe = require('stripe')(process.env.STRIPE_KEY_SECRET)
+import sslRedirect from 'heroku-ssl-redirect';
 
 
 db.then(() => console.log('Connected to MongoDB')).catch(err => console.log(err))
 
 // Middleware
+app.use(sslRedirect());
 app.use(express.static(root))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
