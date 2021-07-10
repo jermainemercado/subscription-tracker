@@ -9,7 +9,12 @@ const session = require('express-session');
 const passport = require('passport');
 const discordStrategy = require('./strategies/discordstrat.js');
 const db = require('./database/database.js');
-const stripe = require('stripe')(process.env.STRIPE_API_KEY_SECRET)
+const stripe = require('stripe')(process.env.REACT_STRIPE_KEY_PUBLIC)
+const http = require('http');
+const enforce = require('express-sslify');
+
+
+
 
 db.then(() => console.log('Connected to MongoDB')).catch(err => console.log(err))
 
@@ -34,20 +39,15 @@ app.use(session({
     name: 'discord.oauth2',
 }))
 
-//force redirect to https.
-function requireHTTPS(req, res, next) {
-    // The 'x-forwarded-proto' check is for Heroku
-    if (!req.secure && req.get('x-forwarded-proto') !== 'https' && process.env.NODE_ENV !== "development") {
-        return res.redirect('https://' + req.get('host') + req.url);
-    }
-    next();
-}
 // headers
 app.use((req, res, next) => {
     //res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
-    res.setHeader('Access-Control-Allow-Origin', 'https://ticketkings.io/')
+    res.setHeader('Access-Control-Allow-Origin', process.env.ROOT_DOMAIN)
     next()
 })
+
+//Enforce SSL
+
 
 // passport/session
 app.use(passport.initialize());
@@ -61,7 +61,10 @@ app.get('*', (req, res) => {
     res.sendFile('index.html', {root})
 })
 
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`)
-    console.log(root);
-})
+// Use enforce.HTTPS({ trustProtoHeader: true }) in case you are behind
+// a load balancer (e.g. Heroku). See further comments below
+app.use(enforce.HTTPS());
+
+http.createServer(app).listen(app.get(port), function() {
+    console.log('Express server listening on port ' + app.get('port'));
+});
