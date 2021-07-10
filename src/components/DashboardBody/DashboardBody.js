@@ -43,13 +43,7 @@ const DashboardBody = () => {
   }
 
   async function joinClickHandler() {
-    const { REACT_APP_ROLE_ID } = process.env;
-    const { REACT_APP_GUILD_ID } = process.env;
     let userId = discordUser.discordId;
-    //console.log(REACT_APP_GUILD_ID)
-    //console.log(userId)
-    //console.log(accessToken)
-    //console.log(accessToken)
     await fetch(`/discordBot/joinDiscord?&user=${userId}&paymentInfo=${paymentStatus}&accessToken=${accessToken}`,
     {method: 'GET'});
   }

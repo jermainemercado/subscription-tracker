@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 const router = require('express').Router();
-const stripe = require('stripe')(process.env.STRIPE_API_KEY_SECRET);
+const stripe = require('stripe')(process.env.STRIPE_KEY_SECRET);
 const DiscordUser = require('../database/Schemas/discordUser.js');
 
 router.get('/joinDiscord', async (req, res) => {

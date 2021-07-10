@@ -8,7 +8,7 @@ router.get('/', passport.authenticate('discord'));
 // eslint-disable-next-line prettier/prettier
 router.get('/redirect', passport.authenticate('discord', {
     failiureRedirect: '/forbidden',
-    successRedirect: '/key',
+    successRedirect: '/dashboard',
 }), (req, res) => {
     res.send(req.user);
 })

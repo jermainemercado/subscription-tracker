@@ -2,7 +2,7 @@
 const DiscordStrategy = require('passport-discord').Strategy;
 const passport = require('passport');
 const DiscordUser = require('../database/Schemas/discordUser.js');
-const stripe = require('stripe')(process.env.REACT_STRIPE_KEY_PUBLIC)
+const stripe = require('stripe')(process.env.STRIPE_KEY_SECRET)
 
 // generates a random key from a-z A-Z 0-9
 function generateLicenseKey() {
@@ -51,7 +51,7 @@ passport.deserializeUser( async (id, done) => {
 passport.use(new DiscordStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: `${process.env.ROOT_DOMAIN}/redirect`,
+    callbackURL: `${process.env.ROOT_DOMAIN}${process.env.CLIENT_REDIRECT}`,
     scope: ['identify', 'guilds', 'email', 'guilds.join'],
     passReqToCallback: true,
 }, async (req, accessToken, refreshToken, profile, done) => {

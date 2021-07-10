@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const stripe = require('stripe')(process.env.REACT_STRIPE_KEY_PUBLIC)
+const stripe = require('stripe')(process.env.STRIPE_KEY_SECRET)
 const DiscordUser = require('../database/Schemas/discordUser.js');
 const bodyParser = require("body-parser");
 
@@ -13,7 +13,7 @@ router.post('/createCheckoutSession', async (req, res) => {
         line_items: [
             {
                 quantity: 1,
-                price: process.env.TEST_SUBSCRIPTION_KEY
+                price: process.env.SUBSCRIPTION_KEY
             },
         ],
         mode: 'subscription',
