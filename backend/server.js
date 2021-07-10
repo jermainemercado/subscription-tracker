@@ -10,10 +10,7 @@ const passport = require('passport');
 const discordStrategy = require('./strategies/discordstrat.js');
 const db = require('./database/database.js');
 const stripe = require('stripe')(process.env.REACT_STRIPE_KEY_PUBLIC)
-const forceSSL = require('express-force-ssl');
-var fs = require('fs');
-var http = require('http');
-var https = require('https');
+
 
 db.then(() => console.log('Connected to MongoDB')).catch(err => console.log(err))
 
