@@ -64,6 +64,6 @@ app.get('*', (req, res) => {
 // a load balancer (e.g. Heroku). See further comments below
 app.use(enforce.HTTPS());
 
-http.createServer(app).listen(app.get(port), function() {
-    console.log('Express server listening on port ' + app.get('port'));
+http.createServer(app).listen(app.get(process.env.PORT), function() {
+    console.log('Express server listening on port ' + process.env.PORT);
 });
