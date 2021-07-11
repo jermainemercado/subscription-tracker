@@ -80,7 +80,7 @@ passport.use(new DiscordStrategy({
             
             user.firstPayment = (perStart === null || undefined) ? perStart : user.firstPayment;
             user.nextDue = (perEnd === null || undefined) ? perEnd : user.nextDue;
-            //user.stripe_subscription_id = (subscription.id === null || undefined) ? subscription.id : user.stripe_subscription_id;
+            user.stripe_subscription_id = (req.session.subscription.id === null || undefined) ? req.session.subscription.id : user.stripe_subscription_id;
             user.stripe_id = (req.session.stripe_id === null || undefined) ? req.session.stripe_id : user.stripe_id;
             const updatedUser = await user.save();
             done(null, user);
