@@ -16,7 +16,9 @@ const secure = require('ssl-express-www');
 db.then(() => console.log('Connected to MongoDB')).catch(err => console.log(err))
 
 // Middleware
-app.use(secure);
+app.use(redirectSSL.create({
+    exclude: ['localhost']
+}));
 app.use(express.static(root))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
