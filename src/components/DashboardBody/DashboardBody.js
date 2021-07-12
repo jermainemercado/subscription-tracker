@@ -44,6 +44,9 @@ const DashboardBody = () => {
 
   async function joinClickHandler() {
     let userId = discordUser.discordId;
+    console.log(userId);
+    console.log(paymentStatus);
+    console.log(accessToken);
     await fetch(`/discordBot/joinDiscord?&user=${userId}&paymentInfo=${paymentStatus}&accessToken=${accessToken}`,
     {method: 'GET'});
   }
