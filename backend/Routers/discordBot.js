@@ -47,6 +47,9 @@ router.get('/joinDiscord', async (req, res) => {
                 res.send({test: res1, test2: res2});
             }
         }
+        else {
+            res.end();
+        }
     }
 
     catch (error) {
