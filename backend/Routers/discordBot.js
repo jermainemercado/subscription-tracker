@@ -9,7 +9,8 @@ router.get('/joinDiscord', async (req, res) => {
             let curUser = await DiscordUser.findOne({discordId: req.query.user});
             if (curUser !== null) {
                 console.log(curUser);
-
+                let res1;
+                let res2;
                 await fetch(`https://discord.com/api/v8/guilds/${process.env.REACT_APP_GUILD_ID}/members/${curUser.discordId}`, 
                 {
                     method: 'PUT',
@@ -23,8 +24,10 @@ router.get('/joinDiscord', async (req, res) => {
                     })
                 }).then(res => {
                     console.log(res);
+                    res1 = res;
                 }).catch(err => { 
-                    console.log(err)
+                    console.log(err);
+                    res1 = res;
                 });
 
                 await fetch(`https://discord.com/api/v8/guilds/${process.env.REACT_APP_GUILD_ID}/members/${curUser.discordId}/roles/${process.env.REACT_APP_ROLE_ID}`,
@@ -34,7 +37,14 @@ router.get('/joinDiscord', async (req, res) => {
                         "Authorization": `Bot ${process.env.BOT_TOKEN}`,
                             "Content-Type": "application/json",
                     }
+                }).then(res => {
+                    console.log(res);
+                    res2 = res;
+                }).catch(err => {
+                    console.log(err);
+                    res2 = err
                 })
+                res.send({test: res1, test2: res2});
             }
         }
     }
