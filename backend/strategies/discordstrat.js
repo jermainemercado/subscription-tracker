@@ -66,6 +66,7 @@ passport.use(new DiscordStrategy({
         let subscription;
         let checkout;
         if (user) {
+            console.log(user);
             if (req.session.stripe_id) {
                 checkout = await stripe.checkout.sessions.retrieve(
                     req.session.stripe_id,
@@ -77,11 +78,11 @@ passport.use(new DiscordStrategy({
                 perStart = new Date(subscription.current_period_start * 1000);
             }
             
-            user.firstPayment = (perStart === null || undefined) ? perStart : user.firstPayment;
-            user.nextDue = (perEnd === null || undefined) ? perEnd : user.nextDue;
-            user.stripe_id = (req.session.stripe_id === null || undefined) ? req.session.stripe_id : user.stripe_id;
+            user.firstPayment = (perStart !== null || undefined) ? perStart : user.firstPayment;
+            user.nextDue = (perEnd !== null || undefined) ? perEnd : user.nextDue;
+            user.stripe_id = (req.session.stripe_id !== null || undefined) ? req.session.stripe_id : user.stripe_id;
             const updatedUser = await user.save();
-            done(null, user);
+            done(null, updatedUser);
         } else {
             if (req.session.stripe_id) {
                 checkout = await stripe.checkout.sessions.retrieve(
@@ -93,7 +94,7 @@ passport.use(new DiscordStrategy({
                 perEnd = new Date(subscription.current_period_end * 1000);
                 perStart = new Date(subscription.current_period_start * 1000);
             }
-            
+
             const newUser = await DiscordUser.create({
                 discordId: profile.id,
                 username: profile.username,
@@ -101,11 +102,11 @@ passport.use(new DiscordStrategy({
                 avatarLink: avatar,
                 discordHash: profile.discriminator,
                 
-                firstPayment: (perStart === null || undefined) ? perStart : "none",
-                nextDue: (perEnd === null || undefined) ? perEnd : "none",
+                firstPayment: (perStart !== null || undefined) ? perStart : "none",
+                nextDue: (perEnd !== null || undefined) ? perEnd : "none",
 
-                stripe_subscription_id: (subscription.id === null || undefined) ? subscription.id : "none",
-                stripe_id: (req.session.stripe_id === null || undefined) ? req.session.stripe_id : "none",
+                stripe_subscription_id: (subscription.id !== null || undefined) ? subscription.id : "none",
+                stripe_id: (req.session.stripe_id !== null || undefined) ? req.session.stripe_id : "none",
 
                 licenseKey: generateLicenseKey(),
                 lifetimePayment: false,
