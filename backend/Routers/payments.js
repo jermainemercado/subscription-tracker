@@ -102,7 +102,7 @@ router.get('/status', async (req, res) => {
             const checkout = await stripe.checkout.sessions.retrieve(
                 discordUser.stripe_id
             )
-            //console.log(checkout)
+            console.log(checkout)
             res.send({message: "Found user", paymentStatus: checkout.payment_status})
         } catch (err) {
             console.log(err.message)
