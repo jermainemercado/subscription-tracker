@@ -104,6 +104,7 @@ passport.use(new DiscordStrategy({
                 discordHash: profile.discriminator,
                 
                 firstPayment: (perStart !== null || undefined) ? perStart : "none",
+                currentPayment: (perStart !== null || undefined) ? perStart : "none",
                 nextDue: (perEnd !== null || undefined) ? perEnd : "none",
 
                 stripe_subscription_id: (subscription.id !== null || undefined) ? subscription.id : "none",
