@@ -45,6 +45,7 @@ router.post('/webhook', async (req, res) => {
             );
         } catch (err) {
             console.log('Webhook signature verification failed')
+            console.log(err);
             return res.sendStatus(400);
         }
         data = event;
@@ -90,6 +91,7 @@ router.post('/webhook', async (req, res) => {
         default:
             break;
     }
+    res.send();
     res.json({received: true});
 })
 
