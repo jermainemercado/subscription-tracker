@@ -64,7 +64,7 @@ router.post('/webhook', async (req, res) => {
             //Change so we only assign key to user from here not at DB serialization.
             console.log(data);
             const paidUser = await DiscordUser.findOne({ stripe_subscription_id: data.lines.data.subscription })
-            if (user) {
+            if (paidUser) {
                 const subscription = await stripe.subscriptions.retrieve(
                     paidUser.stripe_subscription_id
                 )
