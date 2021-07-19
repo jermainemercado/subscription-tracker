@@ -87,7 +87,6 @@ router.post('/webhook', async (req, res) => {
                     },
                 }).then(res => {
                     console.log(res);
-                    return res.json();
                 })
             }
             await DiscordUser.deleteOne({stripe_subscription_id: data.lines.data.subscription});
@@ -96,7 +95,6 @@ router.post('/webhook', async (req, res) => {
             break;
     }
     res.send();
-    res.json({received: true});
 })
 
 router.get('/status', async (req, res) => {
