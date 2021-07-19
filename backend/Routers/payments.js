@@ -34,7 +34,7 @@ router.post('/webhook', async (req, res) => {
     let data;
     let eventType;
     const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-    data = req.body.data;
+    data = req.body.data.object;
     eventType = req.body.type;
     /*if (webhookSecret) {
         let event;
