@@ -46,7 +46,8 @@ router.post('/webhook', async (req, res) => {
         } catch (err) {
             console.log('Webhook signature verification failed')
             console.log(err);
-            return res.sendStatus(400);
+            
+            return res.json({err: err});
         }
         data = event;
         eventType = event.type;
