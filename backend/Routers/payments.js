@@ -34,7 +34,9 @@ router.post('/webhook', async (req, res) => {
     let data;
     let eventType;
     const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-    if (webhookSecret) {
+    data = req.body.data;
+    eventType = req.body.type;
+    /*if (webhookSecret) {
         let event;
         let signature = req.headers["stripe-signature"];
         try {
@@ -54,7 +56,7 @@ router.post('/webhook', async (req, res) => {
     } else {
         data = req.body.data;
         eventType = req.body.type;
-    }
+    }*/
 
     switch (eventType) {
         case 'invoice.paid':
