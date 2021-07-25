@@ -76,6 +76,8 @@ passport.use(new DiscordStrategy({
                 );
                 perEnd = new Date(subscription.current_period_end * 1000);
                 perStart = new Date(subscription.current_period_start * 1000);
+                stripe_subscription_id: (subscription.id !== null || undefined) ? subscription.id : "none",
+                stripe_id: (req.session.stripe_id !== null || undefined) ? req.session.stripe_id : "none",
             }
             
             user.firstPayment = (perStart !== null || undefined) ? perStart : user.firstPayment;
@@ -106,9 +108,6 @@ passport.use(new DiscordStrategy({
                 firstPayment: (perStart !== null || undefined) ? perStart : "none",
                 currentPayment: (perStart !== null || undefined) ? perStart : "none",
                 nextDue: (perEnd !== null || undefined) ? perEnd : "none",
-
-                stripe_subscription_id: (subscription.id !== null || undefined) ? subscription.id : "none",
-                stripe_id: (req.session.stripe_id !== null || undefined) ? req.session.stripe_id : "none",
 
                 licenseKey: generateLicenseKey(),
                 lifetimePayment: false,
