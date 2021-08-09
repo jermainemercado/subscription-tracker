@@ -34,7 +34,9 @@ router.post('/webhook', async (req, res) => {
     let data;
     let eventType;
     const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-    if (webhookSecret) {
+    data = req.body.data.object;
+    eventType = req.body.type;
+    /*if (webhookSecret) {
         let event;
         let signature = req.headers["stripe-signature"];
         try {
@@ -45,21 +47,24 @@ router.post('/webhook', async (req, res) => {
             );
         } catch (err) {
             console.log('Webhook signature verification failed')
-            return res.sendStatus(400);
+            console.log(err);
+            
+            return res.json({err: err});
         }
         data = event;
         eventType = event.type;
     } else {
         data = req.body.data;
         eventType = req.body.type;
-    }
+    }*/
 
     switch (eventType) {
         case 'invoice.paid':
             //TO-DO:
             //Change so we only assign key to user from here not at DB serialization.
-            const paidUser = await DiscordUser.findOne({ stripe_subscription_id: data.data.lines.subscription })
-            if (user) {
+            console.log(data);
+            const paidUser = await DiscordUser.findOne({ stripe_subscription_id: data.lines.data.subscription })
+            if (paidUser) {
                 const subscription = await stripe.subscriptions.retrieve(
                     paidUser.stripe_subscription_id
                 )
@@ -68,7 +73,7 @@ router.post('/webhook', async (req, res) => {
             }
             break;
         case 'invoice.payment_failed':
-            const user = await DiscordUser.findOne({stripe_subscription_id: data.data.lines.subscription})
+            const user = await DiscordUser.findOne({stripe_subscription_id: data.lines.data.subscription})
             if (user) {
                 const subscription = await stripe.subscription.del(
                     data.data.lines.subscription,
@@ -82,15 +87,14 @@ router.post('/webhook', async (req, res) => {
                     },
                 }).then(res => {
                     console.log(res);
-                    return res.json();
                 })
             }
-            await DiscordUser.deleteOne({stripe_subscription_id: data.data.lines.subscription});
+            await DiscordUser.deleteOne({stripe_subscription_id: data.lines.data.subscription});
             break;
         default:
             break;
     }
-    res.json({received: true});
+    res.send();
 })
 
 router.get('/status', async (req, res) => {

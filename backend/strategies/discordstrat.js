@@ -64,6 +64,8 @@ passport.use(new DiscordStrategy({
         let perStart;
 
         let subscription;
+        let stripe_id;
+        let stripe_sub_id;
         let checkout;
         if (user) {
             console.log(user);
@@ -76,12 +78,14 @@ passport.use(new DiscordStrategy({
                 );
                 perEnd = new Date(subscription.current_period_end * 1000);
                 perStart = new Date(subscription.current_period_start * 1000);
+                stripe_sub_id = (subscription.id !== null || undefined) ? subscription.id : "none";
+                stripe_id = (req.session.stripe_id !== null || undefined) ? req.session.stripe_id : "none";
             }
             
             user.firstPayment = (perStart !== null || undefined) ? perStart : user.firstPayment;
             user.nextDue = (perEnd !== null || undefined) ? perEnd : user.nextDue;
-            user.stripe_subscription_id = (req.session.subscription.id !== null || undefined) ? req.session.subscription.id : user.stripe_subscription_id;
-            user.stripe_id = (req.session.stripe_id !== null || undefined) ? req.session.stripe_id : user.stripe_id;
+            user.stripe_subscription_id = (stripe_sub_id !== null || undefined) ? stripe_sub_id : user.stripe_subscription_id;
+            user.stripe_id = (stripe_id !== null || undefined) ? stripe_id : user.stripe_id;
             const updatedUser = await user.save();
             done(null, updatedUser);
         } else {
@@ -107,9 +111,8 @@ passport.use(new DiscordStrategy({
                 currentPayment: (perStart !== null || undefined) ? perStart : "none",
                 nextDue: (perEnd !== null || undefined) ? perEnd : "none",
 
-                stripe_subscription_id: (subscription.id !== null || undefined) ? subscription.id : "none",
-                stripe_id: (req.session.stripe_id !== null || undefined) ? req.session.stripe_id : "none",
-
+                stripe_subscription_id: (stripe_sub_id !== null || undefined) ? stripe_sub_id : "none",
+                stripe_id: (stripe_id !== null || undefined) ? stripe_id : "none",
                 licenseKey: generateLicenseKey(),
                 lifetimePayment: false,
             })
