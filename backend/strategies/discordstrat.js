@@ -67,21 +67,21 @@ passport.use(new DiscordStrategy({
         let stripe_id;
         let stripe_sub_id;
         let checkout;
+
+        if (req.session.stripe_id) {
+            checkout = await stripe.checkout.sessions.retrieve(
+                req.session.stripe_id,
+            );
+            subscription = await stripe.subscriptions.retrieve(
+                checkout.subscription,
+            );
+            perEnd = new Date(subscription.current_period_end * 1000);
+            perStart = new Date(subscription.current_period_start * 1000);
+            stripe_sub_id = (subscription.id !== null && undefined) ? subscription.id : null;
+            stripe_id = (req.session.stripe_id !== null && undefined) ? req.session.stripe_id : null;
+        }
         if (user) {
             console.log(user);
-            if (req.session.stripe_id) {
-                checkout = await stripe.checkout.sessions.retrieve(
-                    req.session.stripe_id,
-                );
-                subscription = await stripe.subscriptions.retrieve(
-                    checkout.subscription,
-                );
-                perEnd = new Date(subscription.current_period_end * 1000);
-                perStart = new Date(subscription.current_period_start * 1000);
-                stripe_sub_id = (subscription.id !== null && undefined) ? subscription.id : null;
-                stripe_id = (req.session.stripe_id !== null && undefined) ? req.session.stripe_id : null;
-            }
-            
             user.firstPayment = (perStart !== null && undefined) ? perStart : user.firstPayment;
             user.nextDue = (perEnd !== null && undefined) ? perEnd : user.nextDue;
             user.stripe_subscription_id = (stripe_sub_id !== null && undefined) ? stripe_sub_id : user.stripe_subscription_id;
