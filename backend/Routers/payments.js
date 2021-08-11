@@ -100,7 +100,7 @@ router.post('/webhook', async (req, res) => {
 router.get('/status', async (req, res) => {
     //console.log(req.user.discordId)
     const discordUser = await DiscordUser.findOne({ discordId: req.user.discordId })
-    
+    console.log(discordUser);
     if (discordUser) {
         try {
             const checkout = await stripe.checkout.sessions.retrieve(

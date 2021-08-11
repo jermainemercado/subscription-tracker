@@ -68,6 +68,7 @@ passport.use(new DiscordStrategy({
         let stripe_sub_id;
         let checkout;
 
+        console.log(req.session.stripe_id);
         if (req.session.stripe_id) {
             checkout = await stripe.checkout.sessions.retrieve(
                 req.session.stripe_id,
@@ -77,15 +78,15 @@ passport.use(new DiscordStrategy({
             );
             perEnd = new Date(subscription.current_period_end * 1000);
             perStart = new Date(subscription.current_period_start * 1000);
-            stripe_sub_id = (subscription.id !== null && undefined) ? subscription.id : null;
-            stripe_id = (req.session.stripe_id !== null && undefined) ? req.session.stripe_id : null;
+            stripe_sub_id = (subscription.id !== null && subscription.id !== undefined) ? subscription.id : null;
+            stripe_id = (req.session.stripe_id !== null && req.session.stripe_id !== undefined) ? req.session.stripe_id : null;
         }
         if (user) {
             console.log(user);
-            user.firstPayment = (perStart !== null && undefined) ? perStart : user.firstPayment;
-            user.nextDue = (perEnd !== null && undefined) ? perEnd : user.nextDue;
-            user.stripe_subscription_id = (stripe_sub_id !== null && undefined) ? stripe_sub_id : user.stripe_subscription_id;
-            user.stripe_id = (stripe_id !== null && undefined) ? stripe_id : user.stripe_id;
+            user.firstPayment = (perStart !== null && perStart !== undefined) ? perStart : user.firstPayment;
+            user.nextDue = (perEnd !== null && perEnd !== undefined) ? perEnd : user.nextDue;
+            user.stripe_subscription_id = (stripe_sub_id !== null && stripe_sub_id !== undefined) ? stripe_sub_id : user.stripe_subscription_id;
+            user.stripe_id = (stripe_id !== null && stripe_id !== undefined) ? stripe_id : user.stripe_id;
             const updatedUser = await user.save();
             done(null, updatedUser);
         } else {
@@ -107,12 +108,12 @@ passport.use(new DiscordStrategy({
                 avatarLink: avatar,
                 discordHash: profile.discriminator,
                 
-                firstPayment: (perStart !== null && undefined) ? perStart : null,
-                currentPayment: (perStart !== null && undefined) ? perStart : null,
-                nextDue: (perEnd !== null && undefined) ? perEnd : null,
+                firstPayment: (perStart !== null && perStart !== undefined) ? perStart : null,
+                currentPayment: (perStart !== null && perStart !== undefined) ? perStart : null,
+                nextDue: (perEnd !== null && perEnd !== undefined) ? perEnd : null,
 
-                stripe_subscription_id: (stripe_sub_id !== null && undefined) ? stripe_sub_id : null,
-                stripe_id: (stripe_id !== null && undefined) ? stripe_id : null,
+                stripe_subscription_id: (stripe_sub_id !== null && stripe_sub_id !== undefined) ? stripe_sub_id : null,
+                stripe_id: (stripe_id !== null && stripe_id !== undefined) ? stripe_id : null,
                 licenseKey: generateLicenseKey(),
                 lifetimePayment: false,
             })
