@@ -59,7 +59,7 @@ router.post('/webhook', async (req, res) => {
     }*/
 
     switch (eventType) {
-        case 'invoice.paid':
+        case 'payment_intent.succeeded':
             //TO-DO:
             //Change so we only assign key to user from here not at DB serialization.
             const paidUser = await DiscordUser.findOne({ stripe_subscription_id: data.lines.data.subscription })

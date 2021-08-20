@@ -110,7 +110,7 @@ passport.use(new DiscordStrategy({
                 
                 firstPayment: perStart,
                 currentPayment: perStart,
-                nextDue: prependListener,
+                nextDue: perEnd,
 
                 stripe_subscription_id: stripe_sub_id,
                 stripe_id: stripe_id,
