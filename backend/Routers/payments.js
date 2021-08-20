@@ -62,8 +62,8 @@ router.post('/webhook', async (req, res) => {
         case 'invoice.paid':
             //TO-DO:
             //Change so we only assign key to user from here not at DB serialization.
-            console.log(data);
             const paidUser = await DiscordUser.findOne({ stripe_subscription_id: data.lines.data.subscription })
+            console.log(paidUser);
             if (paidUser) {
                 const subscription = await stripe.subscriptions.retrieve(
                     paidUser.stripe_subscription_id
@@ -74,6 +74,7 @@ router.post('/webhook', async (req, res) => {
             break;
         case 'invoice.payment_failed':
             const user = await DiscordUser.findOne({stripe_subscription_id: data.lines.data.subscription})
+            console.log(user);
             if (user) {
                 const subscription = await stripe.subscription.del(
                     data.data.lines.subscription,
