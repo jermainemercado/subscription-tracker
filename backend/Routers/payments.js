@@ -59,10 +59,10 @@ router.post('/webhook', async (req, res) => {
     }*/
 
     switch (eventType) {
-        case 'payment_intent.succeeded':
+        case 'invoice.paid':
             //TO-DO:
             //Change so we only assign key to user from here not at DB serialization.
-            const paidUser = await DiscordUser.findOne({ stripe_subscription_id: data.lines.data.subscription })
+            const paidUser = await DiscordUser.findOne({ stripe_subscription_id: data.subscription })
             console.log(paidUser);
             if (paidUser) {
                 const subscription = await stripe.subscriptions.retrieve(
@@ -73,11 +73,11 @@ router.post('/webhook', async (req, res) => {
             }
             break;
         case 'invoice.payment_failed':
-            const user = await DiscordUser.findOne({stripe_subscription_id: data.lines.data.subscription})
+            const user = await DiscordUser.findOne({stripe_subscription_id: data.subscription})
             console.log(user);
             if (user) {
                 const subscription = await stripe.subscription.del(
-                    data.data.lines.subscription,
+                    data.subscription,
                 );
                 await fetch(`https://discord.com/api/v8/guilds/${process.env.REACT_APP_GUILD_ID}/members/${user.discordId}`, 
                 {
@@ -90,7 +90,7 @@ router.post('/webhook', async (req, res) => {
                     console.log(res);
                 })
             }
-            await DiscordUser.deleteOne({stripe_subscription_id: data.lines.data.subscription});
+            await DiscordUser.deleteOne({stripe_subscription_id: data.subscription});
             break;
         default:
             break;
