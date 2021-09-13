@@ -75,7 +75,7 @@ router.post('/webhook', async (req, res) => {
             const user = await DiscordUser.findOne({stripe_subscription_id: data.subscription})
             console.log(user);
             if (user) {
-                const subscription = await stripe.subscription.del(
+                const subscription = await stripe.subscriptions.del(
                     data.subscription,
                 );
                 await fetch(`https://discord.com/api/v8/guilds/${process.env.REACT_APP_GUILD_ID}/members/${user.discordId}`, 
