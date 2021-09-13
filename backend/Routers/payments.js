@@ -99,21 +99,25 @@ router.post('/webhook', async (req, res) => {
 
 router.get('/status', async (req, res) => {
     //console.log(req.user.discordId)
-    const discordUser = await DiscordUser.findOne({ discordId: req.user.discordId })
-    console.log(discordUser);
-    if (discordUser) {
-        try {
-            const checkout = await stripe.checkout.sessions.retrieve(
-                discordUser.stripe_id
-            )
-            console.log(checkout)
-            res.send({message: "Found user", paymentStatus: checkout.payment_status})
-        } catch (err) {
-            console.log(err.message)
+    if (req.user.discordId) {// should bandaid fix the problem we were encountering
+        const discordUser = await DiscordUser.findOne({ discordId: req.user.discordId })
+        console.log(discordUser);
+        if (discordUser) {
+            try {
+                const checkout = await stripe.checkout.sessions.retrieve(
+                    discordUser.stripe_id
+                )
+                console.log(checkout)
+                res.send({message: "Found user", paymentStatus: checkout.payment_status})
+            } catch (err) {
+                console.log(err.message)
+            }
+            
+        } else {
+            res.send({message : 'Discord user not found'})
         }
-        
     } else {
-        res.send({message : 'Discord user not found'})
+        console.log("No users found...")
     }
 })
 
