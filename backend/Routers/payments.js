@@ -2,7 +2,7 @@ const router = require('express').Router();
 const stripe = require('stripe')(process.env.STRIPE_KEY_SECRET)
 const DiscordUser = require('../database/Schemas/discordUser.js');
 const bodyParser = require("body-parser");
-import fetch from 'node-fetch';
+const fetch = require('node-fetch');
 
 
 router.post('/createCheckoutSession', async (req, res) => {
@@ -65,12 +65,12 @@ router.post('/webhook', async (req, res) => {
             //TO-DO:
             //Change so we only assign key to user from here not at DB serialization.
             let paidUser = await DiscordUser.findOne({ stripe_subscription_id: data.subscription })
-            console.log(paidUser);
             if (paidUser) {
                 const subscription = await stripe.subscriptions.retrieve(
                     paidUser.stripe_subscription_id
                 )
                 paidUser = await DiscordUser.updateOne({stripe_subscription_id: data.subscription}, { "$set": {"currentPayment" : new Date(subscription.current_period_start * 1000) }, "nextDue": new Date(subscription.current_period_end * 1000) })
+                console.log(paidUser);
             }
             break;
         case 'invoice.payment_failed':
