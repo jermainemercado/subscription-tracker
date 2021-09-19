@@ -2,6 +2,8 @@ const router = require('express').Router();
 const stripe = require('stripe')(process.env.STRIPE_KEY_SECRET)
 const DiscordUser = require('../database/Schemas/discordUser.js');
 const bodyParser = require("body-parser");
+import fetch from 'node-fetch';
+
 
 router.post('/createCheckoutSession', async (req, res) => {
     console.log('creating stripe session')
@@ -75,9 +77,6 @@ router.post('/webhook', async (req, res) => {
             const user = await DiscordUser.findOne({stripe_subscription_id: data.subscription})
             console.log(user);
             if (user) {
-                const subscription = await stripe.subscriptions.del(
-                    data.subscription,
-                );
                 await fetch(`https://discord.com/api/v8/guilds/${process.env.REACT_APP_GUILD_ID}/members/${user.discordId}`, 
                 {
                     method: 'DELETE',
@@ -90,6 +89,9 @@ router.post('/webhook', async (req, res) => {
                 })
             }
             await DiscordUser.deleteOne({stripe_subscription_id: data.subscription});
+            const subscription = await stripe.subscriptions.del(
+                data.subscription,
+            );
             break;
         default:
             break;
